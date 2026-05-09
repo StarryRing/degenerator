@@ -1,182 +1,1944 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>异次元丨分享站</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#7c3aed',
-                        dark: '#0f172a',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            background: url("https://i.ibb.co/B14ZRSd/Image-1754766495768.jpg") no-repeat center center;
-            background-size: cover;
-            background-attachment: fixed;
-        }
-        .glass {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .card-item {
-            transition: all 0.3s ease;
-        }
-        .card-item:hover {
-            transform: translateY(-6px) scale(1.03);
-            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
-        }
-        .modal-wrap {
-            transition: all 0.3s ease;
-        }
-        .modal-hide {
-            opacity: 0;
-            transform: scale(0.9);
-            pointer-events: none;
-        }
-        .modal-show {
-            opacity: 1;
-            transform: scale(1);
-        }
-        .desc-scroll {
-            white-space: pre-wrap;
-        }
-        .desc-scroll::-webkit-scrollbar {
-            width: 5px;
-        }
-        .desc-scroll::-webkit-scrollbar-thumb {
-            background: #7c3aed;
-            border-radius: 10px;
-        }
-    </style>
-</head>
-<body class="text-gray-100 min-h-screen">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>异次元 - 请认准我们的平台哦~</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
+body {background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);color:#e0e0e0;min-height:100vh;padding-top:80px;transition:all .3s;position:relative}
+.background-container {position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden}
+.background-image {width:100%;height:100%;object-fit:cover;opacity:.15;filter:blur(2px)}
+.gradient-background {position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);z-index:-2}
+/* 背景图片覆盖层 - 支持自定义背景图 */
+.custom-bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;        /* 100%透明 = 完全不透明，完整显示原图 */
+    filter: blur(0px); /* 无模糊效果 */
+    display: none;
+    z-index: -1;
+}
+.container {max-width:1200px;margin:0 auto;padding:20px;position:relative;z-index:1}
+.top-header {position:fixed;top:0;left:0;right:0;background:rgba(26,26,46,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.1);z-index:1000;padding:0 20px}
+.header-content {max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:15px 0}
+.logo-section {display:flex;align-items:center;gap:15px}
+.logo-image {width:90px;height:90px;min-width:90px;min-height:90px;border-radius:50%;object-fit:cover;border:3px solid #4cc9f0;box-shadow:0 0 20px rgba(76,201,240,.7);background:linear-gradient(135deg,#4361ee,#3a0ca3);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:all .3s ease}
+.logo-image:hover {transform:scale(1.05);box-shadow:0 0 30px rgba(76,201,240,.9)}
+.logo-image img {width:100%;height:100%;object-fit:cover}
+.logo-text {color:#4cc9f0;font-weight:bold;font-size:1.5rem;text-shadow:0 0 10px rgba(76,201,240,.7)}
+.site-title {font-size:1.5rem;font-weight:600;color:#fff}
+.site-title span {color:#4cc9f0}
+.main-nav {display:flex;gap:5px;background:rgba(30,30,46,.8);padding:5px;border-radius:12px;border:1px solid rgba(255,255,255,.1)}
+.nav-btn {background:transparent;color:#a9a9a9;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;font-weight:500;font-size:.95rem;transition:all .3s;white-space:nowrap}
+.nav-btn:hover {background:rgba(255,255,255,.05);color:#fff}
+.nav-btn.active {background:linear-gradient(90deg,#4361ee,#3a0ca3);color:#fff;box-shadow:0 4px 12px rgba(67,97,238,.3)}
+.header-right {display:flex;align-items:center;gap:15px}
+.mobile-menu-btn {display:none;background:transparent;border:none;color:#fff;font-size:1.5rem;cursor:pointer;padding:5px}
+.mobile-nav {display:none;position:absolute;top:100%;left:0;right:0;background:rgba(26,26,46,.98);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.1);padding:10px 20px;flex-direction:column;gap:5px}
+.mobile-nav.active {display:flex}
+.mobile-nav .nav-btn {width:100%;justify-content:flex-start;padding:14px 20px;font-size:1rem;border-radius:10px;gap:12px}
+.mobile-nav .nav-btn i {width:22px;text-align:center;font-size:1.1rem}
+.mobile-nav .nav-btn.active {background:linear-gradient(90deg,#4361ee,#3a0ca3);color:#fff}
+@media (max-width:1024px){.main-nav{display:none}.mobile-menu-btn{display:block}.header-right{margin-left:auto}.logo-image{width:70px;height:70px;min-width:70px;min-height:70px}.logo-text{font-size:1.3rem}}
+@media (max-width:768px){.site-title{font-size:1.2rem}.logo-image{width:60px;height:60px;min-width:60px;min-height:60px}.logo-text{font-size:1.1rem}body{padding-top:70px}}
+header{text-align:center;margin-bottom:40px;padding:30px 20px;background:rgba(0,0,0,.3);border-radius:20px;border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(5px)}
+h1{color:#f72585;font-size:2.8rem;margin-bottom:15px;text-shadow:0 0 10px rgba(76,201,240,.5)}
+.tagline{color:#ffd700;font-size:1.2rem;margin-bottom:20px}
+.content-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:30px;margin-bottom:40px}
+.card{background:rgba(30,30,46,.8);border-radius:15px;padding:25px;border:1px solid rgba(255,255,255,.1);box-shadow:0 10px 20px rgba(0,0,0,.2);transition:transform .3s,box-shadow .3s;backdrop-filter:blur(5px)}
+.card:hover{transform:translateY(-5px);box-shadow:0 15px 30px rgba(0,0,0,.3)}
+.card-title{color:#72efdd;font-size:1.5rem;margin-bottom:15px;display:flex;align-items:center;gap:10px}
+.card-title i{color:#4cc9f0}
+.description{line-height:1.6;margin-bottom:20px;font-size:1rem}
+.features{margin:20px 0;padding-left:20px}
+.features li{margin-bottom:10px;line-height:1.5}
+.action-buttons{display:flex;flex-direction:column;gap:15px;margin-top:25px}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:15px 20px;border-radius:10px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .3s;border:none;text-decoration:none;text-align:center}
+.btn-primary{background:linear-gradient(90deg,#4361ee,#3a0ca3);color:#fff}
+.btn-primary:hover{background:linear-gradient(90deg,#3a56d4,#2a0777);transform:scale(1.02)}
+.btn-secondary{background:linear-gradient(90deg,#f72585,#b5179e);color:#fff}
+.btn-secondary:hover{background:linear-gradient(90deg,#e01e75,#9c1588);transform:scale(1.02)}
+.script-box{background:rgba(0,0,0,.4);border-radius:10px;padding:20px;margin:20px 0;border-left:5px solid #4361ee;position:relative;overflow-x:auto}
+.script-box pre{white-space:pre-wrap;word-break:break-all;font-family:'Courier New',monospace;color:#72efdd;font-size:.95rem}
+.copy-btn{position:absolute;top:10px;right:10px;background:rgba(76,201,240,.2);color:#4cc9f0;border:1px solid #4cc9f0;border-radius:5px;padding:8px 15px;cursor:pointer;font-size:.9rem;transition:all .3s;display:flex;align-items:center;gap:5px}
+.copy-btn:hover{background:rgba(76,201,240,.4)}
+.copied-notice{position:fixed;bottom:20px;right:20px;background:#4caf50;color:#fff;padding:15px 25px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,.2);z-index:1000;display:none;animation:fadeIn .3s;align-items:center;gap:10px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade-out{animation:fadeOut .3s forwards}
+@keyframes fadeOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(20px)}}
+footer{text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);color:#a9a9a9;font-size:.9rem}
+.warning{background:rgba(244,67,54,.1);border-left:5px solid #f44336;padding:15px;margin:20px 0;border-radius:5px}
+.info{background:rgba(33,150,243,.1);border-left:5px solid #2196f3;padding:15px;margin:20px 0;border-radius:5px}
+.channels-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin:20px 0}
+.channel-card{background:rgba(255,255,255,.05);border-radius:10px;padding:20px;border:1px solid rgba(255,255,255,.1);transition:all .3s}
+.channel-card:hover{background:rgba(255,255,255,.08);transform:translateY(-3px)}
+.channel-title{display:flex;align-items:center;gap:10px;margin-bottom:15px;color:#72efdd}
+.channel-desc{margin-bottom:15px;line-height:1.5}
+.dev-team{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin:20px 0}
+.dev-card{background:rgba(255,255,255,.05);border-radius:10px;padding:20px;text-align:center;border:1px solid rgba(255,255,255,.1);transition:all .3s}
+.dev-card:hover{background:rgba(255,255,255,.08);transform:translateY(-3px)}
+.dev-name{font-size:1.2rem;font-weight:600;margin-bottom:10px;color:#72efdd}
+.dev-role{color:#a9a9a9;font-size:.9rem;margin-bottom:15px}
+.dev-contact{margin:15px 0;padding:10px;background:rgba(255,255,255,.05);border-radius:8px;font-size:.9rem}
+.contact-link{color:#4cc9f0;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:5px}
+.changelog{max-height:300px;overflow-y:auto;padding-right:10px}
+.changelog-item{background:rgba(255,255,255,.05);padding:15px;border-radius:8px;margin-bottom:15px;border-left:4px solid #4cc9f0}
+.changelog-date{color:#72efdd;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.changelog-content{line-height:1.5}
+.changelog-content ul{margin-top:8px;padding-left:20px}
+.changelog-content li{margin-bottom:5px}
+.service-item{background:rgba(255,255,255,.05);border-radius:10px;padding:20px;margin:15px 0;border:1px solid rgba(255,255,255,.1)}
+.service-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.service-title{color:#72efdd;font-size:1.2rem;font-weight:600}
+.service-price{background:linear-gradient(90deg,#f72585,#b5179e);color:#fff;padding:5px 15px;border-radius:20px;font-weight:600}
+.service-features{margin:10px 0;padding-left:20px}
+.project-features{margin:20px 0}
+.feature-item{background:rgba(255,255,255,.03);border-radius:8px;padding:15px;margin:10px 0;border-left:4px solid}
+.feature-free{border-left-color:#4caf50}
+.feature-paid{border-left-color:#ff9800}
+.feature-title{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-weight:600}
+.feature-free .feature-title{color:#4caf50}
+.feature-paid .feature-title{color:#ff9800}
+.page{display:none;animation:pageFadeIn .5s ease}
+.page.active{display:block}
+@keyframes pageFadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.changelog::-webkit-scrollbar{width:6px}
+.changelog::-webkit-scrollbar-track{background:rgba(255,255,255,.05);border-radius:3px}
+.changelog::-webkit-scrollbar-thumb{background:rgba(76,201,240,.5);border-radius:3px}
+.changelog::-webkit-scrollbar-thumb:hover{background:rgba(76,201,240,.8)}
+@media (max-width:768px){.content-grid{grid-template-columns:1fr}h1{font-size:2rem}.channels-grid,.dev-team{grid-template-columns:1fr}}
+.loading{display:inline-block;width:20px;height:20px;border:3px solid rgba(255,255,255,.3);border-radius:50%;border-top-color:#4cc9f0;animation:spin 1s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.repo-buttons-container{display:flex;flex-direction:column;gap:30px;margin-top:30px}
+.repo-section{background:rgba(30,30,46,.8);border-radius:15px;padding:25px;border:1px solid rgba(255,255,255,.1);box-shadow:0 10px 20px rgba(0,0,0,.2);transition:all .3s ease}
+.repo-section:hover{transform:translateY(-5px);box-shadow:0 15px 30px rgba(0,0,0,.3)}
+.repo-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.repo-title{font-size:1.8rem;font-weight:600;color:#72efdd;display:flex;align-items:center;gap:10px}
+.repo-badge{display:inline-block;padding:5px 15px;border-radius:20px;font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.badge-share{background:linear-gradient(90deg,#4cc9f0,#4361ee);color:#fff}
+.repo-content{margin:20px 0}
+.repo-update-info{background:rgba(255,255,255,.05);border-radius:10px;padding:20px;margin:20px 0;border-left:4px solid #4cc9f0}
+.update-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.update-date{color:#4cc9f0;font-weight:600;display:flex;align-items:center;gap:8px}
+.update-version{background:rgba(76,201,240,.2);color:#4cc9f0;padding:3px 10px;border-radius:15px;font-size:.85rem}
+.update-content ul{margin-top:10px;padding-left:20px}
+.update-content li{margin-bottom:8px;line-height:1.5}
+.repo-stats{display:flex;gap:15px;margin-top:20px;flex-wrap:wrap}
+.stat-item{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);padding:8px 15px;border-radius:8px;font-size:.9rem}
+.stat-count{color:#4cc9f0;font-weight:600}
+.repo-description{line-height:1.6;margin:15px 0;font-size:1.05rem}
+@media (max-width:768px){.repo-header{flex-direction:column;gap:10px}.repo-stats{justify-content:center}}
+.team-list{max-height:400px;overflow-y:auto;padding:10px}
+.team-item{padding:12px 15px;margin-bottom:8px;background:rgba(255,255,255,.04);border-radius:8px;border-left:3px solid #4cc9f0}
+.team-item .name{font-weight:bold;color:#4cc9f0;margin-bottom:4px}
+.team-item .job{color:#ccc;font-size:.9rem;margin-bottom:4px}
+.team-item .contact{color:#aaa;font-size:.85rem}
 
-<div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
-    <div class="glass modal-wrap modal-hide rounded-2xl w-full max-w-2xl relative z-10 p-6">
-        <button onclick="closeModal()" class="absolute top-4 right-4 text-white/70 hover:text-white text-xl">
-            <i class="fa fa-times"></i>
-        </button>
-        <img id="modalImg" src="" class="w-full h-52 object-cover rounded-xl mb-4">
-        <h2 id="modalTitle" class="text-2xl font-bold mb-3"></h2>
-        <div id="modalDesc" class="desc-scroll text-gray-300 leading-relaxed max-h-52 overflow-y-auto mb-6"></div>
-        <a id="modalLink" target="_blank" href="" class="inline-block bg-primary hover:bg-primary/90 px-6 py-2 rounded-lg text-white font-medium transition">立即前往 <i class="fa fa-arrow-right ml-1"></i></a>
-    </div>
+.search-bar{width:100%;max-width:700px;margin:0 auto 30px;background:rgba(30,30,46,.6);border:1px solid rgba(76,201,240,.2);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.search-bar input{width:100%;background:transparent;border:none;outline:none;color:#fff;font-size:1rem}
+.res-card{cursor:pointer}
+.modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-back{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)}
+.modal-box{background:rgba(26,26,46,.98);border:1px solid rgba(76,201,240,.3);border-radius:16px;max-width:650px;width:100%;position:relative;z-index:10;padding:30px;max-height:85vh;overflow-y:auto}
+.modal-close{position:absolute;top:16px;right:20px;background:rgba(76,201,240,.1);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px}
+.modal-img{width:100%;max-height:300px;object-fit:cover;border-radius:12px;margin-bottom:20px;border:1px solid rgba(76,201,240,.2);display:block}
+.modal-detail{line-height:1.9;color:#d0d0d0;margin-bottom:20px;font-size:1rem}
+.modal-detail p{margin-bottom:12px}
+.modal-detail .highlight{color:#4cc9f0;font-weight:600}
+.modal-detail ul{padding-left:24px;margin:10px 0}
+.modal-detail li{margin-bottom:8px;list-style-type:none}
+.modal-detail li::before{content:"✅ ";color:#4caf50}
+.modal-detail .tag{display:inline-block;background:rgba(76,201,240,.15);color:#4cc9f0;padding:2px 10px;border-radius:12px;font-size:.85rem;margin:2px 4px}
+.modal-detail .divider{border:none;border-top:1px solid rgba(255,255,255,.08);margin:16px 0}
+
+.category-container{margin-bottom:25px;background:rgba(30,30,46,.6);border-radius:12px;padding:15px 20px;border:1px solid rgba(255,255,255,.08)}
+.category-main{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.cat-btn{background:rgba(255,255,255,.05);color:#a9a9a9;border:1px solid rgba(255,255,255,.1);padding:8px 18px;border-radius:20px;cursor:pointer;font-size:.9rem;transition:all .3s;display:flex;align-items:center;gap:6px}
+.cat-btn:hover{background:rgba(76,201,240,.1);color:#4cc9f0;border-color:#4cc9f0}
+.cat-btn.active{background:linear-gradient(90deg,#4361ee,#3a0ca3);color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(67,97,238,.3)}
+.cat-btn i{font-size:.85rem}
+.category-sub{display:flex;flex-wrap:wrap;gap:6px;padding-left:5px;min-height:32px;align-items:center}
+.sub-cat-btn{background:rgba(255,255,255,.03);color:#888;border:1px solid rgba(255,255,255,.06);padding:5px 14px;border-radius:15px;cursor:pointer;font-size:.82rem;transition:all .3s}
+.sub-cat-btn:hover{background:rgba(76,201,240,.08);color:#4cc9f0}
+.sub-cat-btn.active{background:rgba(76,201,240,.15);color:#4cc9f0;border-color:#4cc9f0}
+.sub-placeholder{color:#666;font-size:.85rem;font-style:italic}
+.category-divider{border:none;border-top:1px solid rgba(255,255,255,.06);margin:8px 0}
+
+.card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:8px}
+.card-tags{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.cat-tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.75rem;font-weight:500}
+.cat-tag-main{background:rgba(76,201,240,.15);color:#4cc9f0}
+.cat-tag-sub{background:rgba(114,239,221,.12);color:#72efdd}
+
+.music-controls {opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s}
+.music-btn:hover {background:rgba(76,201,240,.1)!important;transform:scale(1.1)}
+.music-main-btn:hover {transform:scale(1.1);box-shadow:0 6px 15px rgba(67,97,238,.4)}
+.playlist-item:hover {background:rgba(255,255,255,.05)!important}
+#playlist::-webkit-scrollbar {width:5px}
+#playlist::-webkit-scrollbar-track {background:rgba(255,255,255,.05);border-radius:3px}
+#playlist::-webkit-scrollbar-thumb {background:rgba(76,201,240,.5);border-radius:3px}
+#volumeSlider::-webkit-slider-thumb {-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#4cc9f0;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="background-container" id="backgroundContainer">
+<div class="gradient-background"></div>
+<img class="custom-bg-image" id="customBg" src="" alt="background">
 </div>
 
-<div class="container mx-auto px-4 py-10">
-    <header class="text-center mb-12">
-        <img id="siteLogo" src="https://i.ibb.co/jPhQVrbT/13161330613.jpg" class="w-28 h-28 rounded-full mx-auto border-2 border-primary/50 shadow-lg shadow-primary/20 mb-4">
-        <h1 class="text-3xl md:text-4xl font-bold">异次元丨资源分享站</h1>
-        <p class="text-gray-400 mt-2">精选资源 · 分类整理 · 一键直达</p>
-    </header>
+<div class="top-header">
+<div class="header-content">
+<div class="logo-section">
+<div class="logo-image" id="logoImage">
+<img id="logoImg" src="" alt="LOGO" style="display:none">
+<div class="logo-text" id="logoText">异 次 元</div>
+</div>
+<div class="site-title">
+<span>异 </span><span>次 元</span>
+</div>
+</div>
 
-    <main class="space-y-12">
-        <section>
-            <h3 class="text-xl font-bold mb-5 flex items-center">
-                <i class="fa fa-folder-open text-primary mr-2"></i> 常用工具
-            </h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+<nav class="main-nav">
+<button class="nav-btn active" onclick="showPage('home')"><i class="fas fa-home"></i> 首页</button>
+<button class="nav-btn" onclick="showPage('servers')"><i class="fas fa-headset"></i> 支持</button>
+<button class="nav-btn" onclick="showPage('resources')"><i class="fas fa-file-alt"></i> 资源</button>
+<button class="nav-btn" onclick="showPage('share')"><i class="fas fa-share-alt"></i> 分享</button>
+<button class="nav-btn" onclick="showPage('services')"><i class="fas fa-shopping-cart"></i> 其他服务</button>
+<button class="nav-btn" onclick="showPage('community')"><i class="fas fa-users"></i> 社区</button>
+<button class="nav-btn" onclick="showPage('about')"><i class="fas fa-info-circle"></i> 关于我们</button>
+</nav>
 
-                <div class="card-item glass rounded-xl overflow-hidden cursor-pointer"
-                     onclick="openModal('百度搜索','https://picsum.photos/800/450?random=101','百度搜索引擎，可搜索全网资讯、图片、知识、教程、资源等，日常必备上网工具，速度快内容全。','https://www.baidu.com')">
-                    <img src="https://picsum.photos/300/200?random=101" class="w-full h-32 object-cover">
-                    <div class="p-3 text-center font-medium">百度搜索</div>
+<div class="header-right">
+<button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+</div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+<button class="nav-btn active" onclick="showPage('home');toggleMobileMenu()"><i class="fas fa-home"></i> 首页</button>
+<button class="nav-btn" onclick="showPage('servers');toggleMobileMenu()"><i class="fas fa-headset"></i> 支持</button>
+<button class="nav-btn" onclick="showPage('resources');toggleMobileMenu()"><i class="fas fa-file-alt"></i> 资源</button>
+<button class="nav-btn" onclick="showPage('share');toggleMobileMenu()"><i class="fas fa-share-alt"></i> 分享</button>
+<button class="nav-btn" onclick="showPage('services');toggleMobileMenu()"><i class="fas fa-shopping-cart"></i> 其他服务</button>
+<button class="nav-btn" onclick="showPage('community');toggleMobileMenu()"><i class="fas fa-users"></i> 社区</button>
+<button class="nav-btn" onclick="showPage('about');toggleMobileMenu()"><i class="fas fa-info-circle"></i> 关于我们</button>
+</div>
+</div>
+
+<div class="container">
+
+<!-- 首页 -->
+<div id="home" class="page active">
+<header>
+<h1><i class="fas fa-star"></i> 跨维破界,异次寻真</h1>
+<p class="tagline">专注分享 · 传播优质内容 · 服务每一位用户</p>
+<p>异次元官方网站 - 资源分享、内容传播、综合服务平台</p>
+</header>
+
+<div class="content-grid">
+<div class="card">
+<h2 class="card-title"><i class="fas fa-info-circle"></i> 关于我们</h2>
+<p class="description">异次元是一个专注于资源分享、内容传播、用户服务的综合平台，我们始终坚持分享优质、安全、实用的内容，为大家提供稳定可靠的服务。</p>
+<ul class="features">
+<li>专注分享优质、安全资源</li>
+<li>内容严格审核，安全可靠</li>
+<li>团队持续维护，稳定更新</li>
+<li>用心服务每一位用户</li>
+</ul>
+</div>
+
+<div class="card">
+<h2 class="card-title"><i class="fas fa-bullhorn"></i> 平台公告</h2>
+<p class="description">查看异次元最新通知、更新与动态</p>
+<div class="changelog">
+<div class="changelog-item">
+<div class="changelog-date"><i class="fas fa-calendar-alt"></i> 2026-05-09</div>
+<div class="changelog-content"><strong>官网上线</strong><ul><li>异次元官方网站正式上线</li><li>优化界面，提升使用体验</li></ul></div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2 class="card-title"><i class="fas fa-users"></i> 官方团队</h2>
+<p class="description">异次元核心管理与运营团队</p>
+<div class="team-list">
+<div class="team-item"><div class="name">孤爷</div><div class="job">创始人 / 总负责</div><div class="contact">联系方式：QQ2700980449</div></div>
+
+<div class="team-item"><div class="name">运营:MR</div><div class="job">内容运营 / 活动策划</div><div class="contact">联系方式：QQ425695367</div></div>
+<div class="team-item"><div class="name">技术:MR</div><div class="job">网站开发 / 功能维护</div><div class="contact">联系方式：QQ425695367</div></div>
+<div class="team-item"><div class="name">客服:MR</div><div class="job">用户咨询 / 问题处理</div><div class="contact">联系方式：QQ425695367</div></div>
+
+<div class="team-item"><div class="name">狐狸阿</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式：QQ3528608184</div></div>
+<div class="team-item"><div class="name">柒月</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式：QQ768905369</div></div>
+<div class="team-item"><div class="name">钟意</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式：QQ2895446424</div></div>
+<div class="team-item"><div class="name">空白</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式：QQ3073756119</div></div>
+<div class="team-item"><div class="name">One  Last  Kiss</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式：QQ3550543661</div></div>
+<div class="team-item"><div class="name">明月</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式: QQ368166509</div></div>
+<div class="team-item"><div class="name">冷</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式：QQ2954676773</div></div>
+<div class="team-item"><div class="name">开心的立立</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式: QQ189483282</div></div>
+<div class="team-item"><div class="name">今晚看黑丝</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式：QQ3139826836</div></div>
+<div class="team-item"><div class="name">荒天帝</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式：站QQ2085254225</div></div>
+<div class="team-item"><div class="name">大ོྂཾ࿆哥࿐</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式：QQ2081508151</div></div>
+<div class="team-item"><div class="name">老白</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式：站QQ3503655068</div></div>
+<div class="team-item"><div class="name">AG梦泪</div><div class="job">社区管理 / 秩序维护</div><div class="contact">联系方式：QQ3574897013</div></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 支持页面 -->
+<div id="servers" class="page">
+<div class="card">
+<h1><i class="fas fa-headset"></i> 支持与售后</h1>
+<p class="description">遇到问题？在这里获取帮助</p>
+<div class="content-grid" style="margin-top:20px">
+<div class="card">
+<div class="card-title"><i class="fas fa-exclamation-circle"></i> 重要须知</div>
+<ul class="features">
+<li>资源类：仅保证资源可正常使用，使用后果自负</li>
+<li>服务类：按对应服务说明提供售后</li>
+<li>⚠️恶意骚扰将被拉黑处理</li>
+</ul>
+</div>
+<div class="card">
+<div class="card-title"><i class="fas fa-headphones-alt"></i> 联系支持</div>
+<ul class="features">
+<li>📧官方邮箱: degenerator@foxmail.com</li>
+<li>问题反馈：请详细描述问题</li>
+<li>建议提交：欢迎提出宝贵意见</li>
+<li>合作洽谈：可联系官方洽谈合作</li>
+</ul>
+</div>
+</div>
+<div class="info" style="margin-top:20px">
+<h3><i class="fas fa-info-circle"></i> 温馨提示</h3>
+<p>请文明咨询，我们会尽快为你处理问题！</p>
+</div>
+</div>
+</div>
+
+<!-- 资源页 -->
+<div id="resources" class="page">
+<div class="card">
+<h1><i class="fas fa-file-alt"></i> 资源中心</h1>
+<p class="description">异次元优质资源汇总，点击查看详情</p>
+
+<div class="search-bar">
+<i class="fas fa-search"></i>
+<input type="text" id="searchRes" placeholder="搜索资源名称 或 输入资源ID精准查找..." oninput="searchRes()">
+</div>
+
+<div class="category-container" id="resCategoryContainer">
+<div class="category-main" id="resCategoryMain"></div>
+<hr class="category-divider">
+<div class="category-sub" id="resCategorySub"></div>
+</div>
+
+<div class="content-grid" id="resList">
+<div class="card res-card" data-id="re001" data-cat="18禁" data-subcat="漫画" onclick="openModal('re001')">
+<div class="card-title"><i class="fas fa-box"></i> 禁漫天堂</div>
+<p class="description">更新:2026/05/09丨知名黄色软件！</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">资源ID：re001</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">漫画</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="re002" data-cat="社交" data-subcat="18禁社区" onclick="openModal('re002')">
+<div class="card-title"><i class="fas fa-box"></i> 推特</div>
+<p class="description">更新:2026/05/09丨全球知名软件！</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">资源ID：re002</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">社交</span><span class="cat-tag cat-tag-sub">18禁社区</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="re003" data-cat="18禁" data-subcat="漫画" onclick="openModal('re003')">
+<div class="card-title"><i class="fas fa-box"></i> Eh站</div>
+<p class="description">更新:2026/05/09丨知名漫画软件！</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">资源ID：re003</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">漫画</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="re004" data-cat="VPN" data-subcat="VPNapp" onclick="openModal('re004')">
+<div class="card-title"><i class="fas fa-box"></i> 绿茶VPN</div>
+<p class="description">更新:2026/05/09丨免费VPN</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">资源ID：re004</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">VPN</span><span class="cat-tag cat-tag-sub">VPNapp</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="re005" data-cat="音乐" data-subcat="破解" onclick="openModal('re005')">
+<div class="card-title"><i class="fas fa-box"></i> 酷我音乐</div>
+<p class="description">更新:2026/05/09丨破解版</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">资源ID：re005</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">音乐</span><span class="cat-tag cat-tag-sub">破解</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="re006" data-cat="社交" data-subcat="18禁社区" onclick="openModal('re006')">
+<div class="card-title"><i class="fas fa-box"></i> 纸飞机</div>
+<p class="description">更新:2026/05/09丨全球知名平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">资源ID：re006</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">社交</span><span class="cat-tag cat-tag-sub">18禁社区</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="re007" data-cat="Ai" data-subcat="角色扮演" onclick="openModal('re007')">
+<div class="card-title"><i class="fas fa-box"></i> MiraiMind</div>
+<p class="description">更新:2026/05/09丨AI角色扮演</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">资源ID：re007</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">Ai</span><span class="cat-tag cat-tag-sub">角色扮演</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="re008" data-cat="18禁" data-subcat="视频" onclick="openModal('re008')">
+<div class="card-title"><i class="fas fa-box"></i> A站</div>
+<p class="description">请更新:2026/05/09丨知名看片平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">资源ID：re008</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">视频</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 分享页 -->
+<div id="share" class="page">
+<div class="card">
+<h1><i class="fas fa-share-alt"></i> 资源分享</h1>
+<p class="description">各类优质分享内容，点击查看详情</p>
+
+<div class="search-bar">
+<i class="fas fa-search"></i>
+<input type="text" id="searchShare" placeholder="搜索分享名称 或 输入分享ID精准查找..." oninput="searchShare()">
+</div>
+
+<div class="category-container" id="shareCategoryContainer">
+<div class="category-main" id="shareCategoryMain"></div>
+<hr class="category-divider">
+<div class="category-sub" id="shareCategorySub"></div>
+</div>
+
+<div class="content-grid" id="shareList">
+<div class="card res-card" data-id="ra001" data-cat="VPN" data-subcat="VPNapp" onclick="openModal('ra001')">
+<div class="card-title"><i class="fas fa-gift"></i> 绿茶VPN</div>
+<p class="description">更新:2026/05/09丨免费VPN</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra001</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">VPN</span><span class="cat-tag cat-tag-sub">VPNapp</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra002" data-cat="VPN" data-subcat="VPNapp" onclick="openModal('ra002')">
+<div class="card-title"><i class="fas fa-gift"></i> 白马VPN</div>
+<p class="description">更新:2026/05/09丨免费VPN</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra002</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">VPN</span><span class="cat-tag cat-tag-sub">VPNapp</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra003" data-cat="VPN" data-subcat="机场" onclick="openModal('ra003')">
+<div class="card-title"><i class="fas fa-gift"></i> 低价机场_宝可梦</div>
+<p class="description">更新:2026/05/09丨套餐价格低</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra003</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">VPN</span><span class="cat-tag cat-tag-sub">机场</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra004" data-cat="VPN" data-subcat="机场" onclick="openModal('ra004')">
+<div class="card-title"><i class="fas fa-gift"></i> 低价机场_便宜机场</div>
+<p class="description">更新:2026/05/09丨套餐价格低</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra004</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">VPN</span><span class="cat-tag cat-tag-sub">机场</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra005" data-cat="VPN" data-subcat="机场" onclick="openModal('ra005')">
+<div class="card-title"><i class="fas fa-gift"></i> 低价机场_一元机场</div>
+<p class="description">更新:2026/05/09丨套餐价格低</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra005</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">VPN</span><span class="cat-tag cat-tag-sub">机场</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra006" data-cat="VPN" data-subcat="机场" onclick="openModal('ra006')">
+<div class="card-title"><i class="fas fa-gift"></i> 低价机场_两元店</div>
+<p class="description">更新:2026/05/09丨套餐价格低</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra006</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">VPN</span><span class="cat-tag cat-tag-sub">机场</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra007" data-cat="VPN" data-subcat="机场" onclick="openModal('ra007')">
+<div class="card-title"><i class="fas fa-gift"></i> 低价机场_星链机场</div>
+<p class="description">更新:2026/05/09丨套餐价格低</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra007</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">VPN</span><span class="cat-tag cat-tag-sub">机场</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra008" data-cat="18禁" data-subcat="视频" onclick="openModal('ra008')">
+<div class="card-title"><i class="fas fa-gift"></i> AcFan站</div>
+<p class="description">更新:2026/05/09丨知名看片平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra008</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">视频</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra009" data-cat="18禁" data-subcat="漫画" onclick="openModal('ra009')">
+<div class="card-title"><i class="fas fa-gift"></i> 禁漫天堂</div>
+<p class="description">更新:2026/05/09丨知名漫画平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra009</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">漫画</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra010" data-cat="18禁" data-subcat="社区" onclick="openModal('ra010')">
+<div class="card-title"><i class="fas fa-gift"></i> 海角</div>
+<p class="description">更新:2026/05/09丨很有名黄色社区</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra010</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">社区</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra011" data-cat="18禁" data-subcat="漫画" onclick="openModal('ra011')">
+<div class="card-title"><i class="fas fa-gift"></i> 嗶咔漫畫</div>
+<p class="description">更新:2026/05/09丨知名漫画平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra011</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">漫画</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra012" data-cat="18禁" data-subcat="漫画" onclick="openModal('ra012')">
+<div class="card-title"><i class="fas fa-gift"></i> EhViewer</div>
+<p class="description">更新:2026/05/09丨知名漫画平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra012</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">漫画</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra013" data-cat="18禁" data-subcat="漫画" onclick="openModal('ra013')">
+<div class="card-title"><i class="fas fa-gift"></i> 嘿嘿连载</div>
+<p class="description">更新:2026/05/09丨黄色漫画平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra013</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">漫画</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra014" data-cat="18禁" data-subcat="漫画" onclick="openModal('ra014')">
+<div class="card-title"><i class="fas fa-gift"></i> JK漫画</div>
+<p class="description">更新:2026/05/09丨黄色漫画平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra014</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">漫画</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra015" data-cat="18禁" data-subcat="社区" onclick="openModal('ra015')">
+<div class="card-title"><i class="fas fa-gift"></i> 猫咪社区</div>
+<p class="description">更新:2026/05/09丨较为知名社区</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra015</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">社区</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra016" data-cat="18禁" data-subcat="视频" onclick="openModal('ra016')">
+<div class="card-title"><i class="fas fa-gift"></i> 汤头条</div>
+<p class="description">更新:2026/05/09丨看片平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra016</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">视频</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra017" data-cat="18禁" data-subcat="视频" onclick="openModal('ra017')">
+<div class="card-title"><i class="fas fa-gift"></i> 抖音成人版</div>
+<p class="description">更新:2026/05/09丨黄色版</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra017</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">视频</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra018" data-cat="18禁" data-subcat="视频" onclick="openModal('ra018')">
+<div class="card-title"><i class="fas fa-gift"></i> 抖音成人版②</div>
+<p class="description">更新:2026/05/09丨黄色版</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra018</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">视频</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra019" data-cat="18禁" data-subcat="游戏" onclick="openModal('ra019')">
+<div class="card-title"><i class="fas fa-gift"></i> 游多多</div>
+<p class="description">更新:2026/05/09丨黄油平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra019</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">游戏</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra020" data-cat="18禁" data-subcat="视频" onclick="openModal('ra020')">
+<div class="card-title"><i class="fas fa-gift"></i> 糖心</div>
+<p class="description">更新:2026/05/09丨知名大平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra020</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">视频</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra021" data-cat="18禁" data-subcat="漫画" onclick="openModal('ra021')">
+<div class="card-title"><i class="fas fa-gift"></i> pixiv</div>
+<p class="description">更新:2026/05/09丨全球知名*画*平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra021</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">漫画</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra022" data-cat="18禁" data-subcat="视频" onclick="openModal('ra022')">
+<div class="card-title"><i class="fas fa-gift"></i> pornhub</div>
+<p class="description">更新:2026/05/09丨全球知名看片平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra022</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">视频</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra023" data-cat="18禁" data-subcat="视频" onclick="openModal('ra023')">
+<div class="card-title"><i class="fas fa-gift"></i> iwara</div>
+<p class="description">更新:2026/05/09丨3D大作</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra023</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">视频</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra024" data-cat="18禁" data-subcat="视频" onclick="openModal('ra024')">
+<div class="card-title"><i class="fas fa-gift"></i> rule34video</div>
+<p class="description">更新:2026/05/09丨看片平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra024</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">视频</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra025" data-cat="18禁" data-subcat="视频" onclick="openModal('ra025')">
+<div class="card-title"><i class="fas fa-gift"></i> hanime1</div>
+<p class="description">更新:2026/05/09丨看片平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra025</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">视频</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra026" data-cat="18禁" data-subcat="漫画" onclick="openModal('ra026')">
+<div class="card-title"><i class="fas fa-gift"></i> Rule34gg</div>
+<p class="description">更新:2026/05/09丨*画*平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra026</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">18禁</span><span class="cat-tag cat-tag-sub">漫画</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra027" data-cat="视频" data-subcat="追番" onclick="openModal('ra027')">
+<div class="card-title"><i class="fas fa-gift"></i> Animeko</div>
+<p class="description">更新:2026/05/09丨追番神器</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra027</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">视频</span><span class="cat-tag cat-tag-sub">追番</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra028" data-cat="视频" data-subcat="追番" onclick="openModal('ra028')">
+<div class="card-title"><i class="fas fa-gift"></i> omofun</div>
+<p class="description">更新:2026/05/09丨有名的追番神器</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra028</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">视频</span><span class="cat-tag cat-tag-sub">追番</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra029" data-cat="视频" data-subcat="追番" onclick="openModal('ra029')">
+<div class="card-title"><i class="fas fa-gift"></i> 风车动漫</div>
+<p class="description">更新:2026/05/09丨一起追番吧</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra029</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">视频</span><span class="cat-tag cat-tag-sub">追番</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra030" data-cat="视频" data-subcat="追番" onclick="openModal('ra030')">
+<div class="card-title"><i class="fas fa-gift"></i> AGE动漫</div>
+<p class="description">更新:2026/05/09丨一起追番吧</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra030</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">视频</span><span class="cat-tag cat-tag-sub">追番</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra031" data-cat="视频" data-subcat="追剧" onclick="openModal('ra031')">
+<div class="card-title"><i class="fas fa-gift"></i> 韩剧TV</div>
+<p class="description">更新:2026/05/09丨韩剧较为齐全</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra031</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">视频</span><span class="cat-tag cat-tag-sub">追剧</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra032" data-cat="视频" data-subcat="电影" onclick="openModal('ra032')">
+<div class="card-title"><i class="fas fa-gift"></i> 电影天堂</div>
+<p class="description">更新:2026/05/09丨电影较为齐全</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra032</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">视频</span><span class="cat-tag cat-tag-sub">电影</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra033" data-cat="视频" data-subcat="追番" onclick="openModal('ra033')">
+<div class="card-title"><i class="fas fa-gift"></i> 樱花动漫</div>
+<p class="description">更新:2026/05/09丨一起追番吧</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra033</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">视频</span><span class="cat-tag cat-tag-sub">追番</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra034" data-cat="视频" data-subcat="追番" onclick="openModal('ra034')">
+<div class="card-title"><i class="fas fa-gift"></i> OMOOTV</div>
+<p class="description">更新:2026/05/09丨一起追番吧</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra034</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">视频</span><span class="cat-tag cat-tag-sub">追番</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra035" data-cat="视频" data-subcat="追番" onclick="openModal('ra035')">
+<div class="card-title"><i class="fas fa-gift"></i> 动漫共和国</div>
+<p class="description">更新:2026/05/09丨较为知名追番平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra035</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">视频</span><span class="cat-tag cat-tag-sub">追番</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra036" data-cat="视频" data-subcat="追番" onclick="openModal('ra036')">
+<div class="card-title"><i class="fas fa-gift"></i> 囧次元</div>
+<p class="description">更新:2026/05/09丨知名追番平台</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra036</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">视频</span><span class="cat-tag cat-tag-sub">追番</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra037" data-cat="视频" data-subcat="追番" onclick="openModal('ra037')">
+<div class="card-title"><i class="fas fa-gift"></i> 漫岛动漫</div>
+<p class="description">更新:2026/05/09丨一起追番吧</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra037</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">视频</span><span class="cat-tag cat-tag-sub">追番</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra038" data-cat="书" data-subcat="电子书" onclick="openModal('ra038')">
+<div class="card-title"><i class="fas fa-gift"></i> 无名图书</div>
+<p class="description">更新:2026/05/09丨看电子书</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra038</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">书</span><span class="cat-tag cat-tag-sub">电子书</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra039" data-cat="视频" data-subcat="电子书" onclick="openModal('ra039')">
+<div class="card-title"><i class="fas fa-gift"></i> 读书知己</div>
+<p class="description">更新:2026/05/09丨...</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra039</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">视频</span><span class="cat-tag cat-tag-sub">电子书</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra040" data-cat="邮箱" data-subcat="无限邮箱" onclick="openModal('ra040')">
+<div class="card-title"><i class="fas fa-gift"></i> 📧无限临时邮箱①</div>
+<p class="description">更新:2026/05/09丨好用的无限临时邮箱</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra040</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">邮箱</span><span class="cat-tag cat-tag-sub">无限邮箱</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra041" data-cat="网盘" data-subcat="p2p" onclick="openModal('ra041')">
+<div class="card-title"><i class="fas fa-gift"></i> PrivyDrop</div>
+<p class="description">更新:2026/05/09丨p2p临时传输文件</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra041</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">网盘</span><span class="cat-tag cat-tag-sub">p2p</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra042" data-cat="其他" data-subcat="实用" onclick="openModal('ra042')">
+<div class="card-title"><i class="fas fa-gift"></i> 免费短网址服务</div>
+<p class="description">更新:2026/05/09丨网址过长使用</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra042</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">其他</span><span class="cat-tag cat-tag-sub">实用</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra043" data-cat="其他" data-subcat="实用" onclick="openModal('ra043')">
+<div class="card-title"><i class="fas fa-gift"></i> GitDB (GitHub搜索引擎)</div>
+<p class="description">更新:2026/05/09丨好用的搜索项目工具</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra043</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">其他</span><span class="cat-tag cat-tag-sub">实用</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra044" data-cat="邮箱" data-subcat="教育邮箱" onclick="openModal('ra044')">
+<div class="card-title"><i class="fas fa-gift"></i> 📧临时教育邮箱</div>
+<p class="description">更新:2026/05/09丨很稀缺</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra044</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">邮箱</span><span class="cat-tag cat-tag-sub">教育邮箱</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra045" data-cat="其他" data-subcat="剪辑工具" onclick="openModal('ra045')">
+<div class="card-title"><i class="fas fa-gift"></i> Pikimov</div>
+<p class="description">更新:2026/05/09丨...</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra045</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">其他</span><span class="cat-tag cat-tag-sub">剪辑工具</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra046" data-cat="模拟器" data-subcat="PC模拟器" onclick="openModal('ra046')">
+<div class="card-title"><i class="fas fa-gift"></i> Windows 模拟器</div>
+<p class="description">更新:2026/05/09丨知名模拟器</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra046</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">模拟器</span><span class="cat-tag cat-tag-sub">PC模拟器</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra047" data-cat="其他" data-subcat="工具" onclick="openModal('ra047')">
+<div class="card-title"><i class="fas fa-gift"></i> anytocopy</div>
+<p class="description">更新:2026/05/09丨...</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra047</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">其他</span><span class="cat-tag cat-tag-sub">工具</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra048" data-cat="其他" data-subcat="其他资源" onclick="openModal('ra048')">
+<div class="card-title"><i class="fas fa-gift"></i> FliiipBook</div>
+<p class="description">更新:2026/05/09丨...</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra048</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">其他</span><span class="cat-tag cat-tag-sub">其他资源</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra049" data-cat="其他" data-subcat="工具" onclick="openModal('ra049')">
+<div class="card-title"><i class="fas fa-gift"></i> RealDubbing</div>
+<p class="description">更新:2026/05/09丨...</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra049</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">其他</span><span class="cat-tag cat-tag-sub">工具</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra050" data-cat="Ai" data-subcat="API" onclick="openModal('ra050')">
+<div class="card-title"><i class="fas fa-gift"></i> bytez</div>
+<p class="description">更新:2026/05/09丨众多AI大模型</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra050</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">Ai</span><span class="cat-tag cat-tag-sub">API</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra051" data-cat="Ai" data-subcat="中转站" onclick="openModal('ra051')">
+<div class="card-title"><i class="fas fa-gift"></i> zenmux</div>
+<p class="description">更新:2026/05/09丨AI大模型中转站</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra051</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">Ai</span><span class="cat-tag cat-tag-sub">中转站</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra052" data-cat="Ai" data-subcat="AI画图" onclick="openModal('ra052')">
+<div class="card-title"><i class="fas fa-gift"></i> wallpaper</div>
+<p class="description">更新:2026/05/09丨...</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra052</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">Ai</span><span class="cat-tag cat-tag-sub">AI画图</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra053" data-cat="其他" data-subcat="剪辑工具" onclick="openModal('ra053')">
+<div class="card-title"><i class="fas fa-gift"></i> zumie</div>
+<p class="description">更新:2026/05/09丨...</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra053</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">其他</span><span class="cat-tag cat-tag-sub">剪辑工具</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra054" data-cat="Ai" data-subcat="镜像站" onclick="openModal('ra054')">
+<div class="card-title"><i class="fas fa-gift"></i> ChatGPT 镜像站</div>
+<p class="description">更新:2026/05/09丨免费好用</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra054</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">Ai</span><span class="cat-tag cat-tag-sub">镜像站</span></div>
+</div>
+</div>
+
+<div class="card res-card" data-id="ra055" data-cat="Ai" data-subcat="其他" onclick="openModal('ra055')">
+<div class="card-title"><i class="fas fa-gift"></i> AI 工具导航站</div>
+<p class="description">更新:2026/05/09丨...</p>
+<div class="card-footer">
+<div style="color:#4cc9f0;font-size:12px">分享ID：ra055</div>
+<div class="card-tags"><span class="cat-tag cat-tag-main">Ai</span><span class="cat-tag cat-tag-sub">其他</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 其他服务 -->
+<div id="services" class="page">
+<div class="card">
+<h1><i class="fas fa-shopping-cart"></i> 其他服务</h1>
+<p class="description">平台增值服务，按需查看</p>
+<div class="service-item">
+<div class="service-header">
+<div class="service-title">广告投放</div>
+<div class="service-price">商务洽谈</div>
+</div>
+<p class="description">支持各类正规广告投放，面向精准用户群体，曝光效果好</p>
+<ul class="service-features">
+<li>正规合法广告均可</li>
+<li>价格实惠，性价比高</li>
+<li>长期合作更优惠</li>
+</ul>
+</div>
+<div class="service-item">
+<div class="service-header">
+<div class="service-title">合作推广</div>
+<div class="service-price">商务洽谈</div>
+</div>
+<p class="description">欢迎优质项目、资源、平台与我们合作推广</p>
+<ul class="service-features">
+<li>资源置换、联合推广</li>
+<li>长期稳定合作优先</li>
+<li>正规合法项目均可</li>
+</ul>
+</div>
+<div class="info">
+<p>⚠️所有服务均为正规合作，违规内容一律拒绝！</p>
+</div>
+</div>
+</div>
+
+<!-- 社区 -->
+<div id="community" class="page">
+<div class="card">
+<h1><i class="fas fa-users"></i> 社区公告</h1>
+<p class="description">社区相关通知与规则，请勿轻信外部信息</p>
+<div class="card" style="margin-top:20px">
+<div class="card-title"><i class="fas fa-bullhorn"></i> 社区公告</div>
+<div class="description" style="line-height:1.8">
+<p>👑官方唯一发布社区网站: https://link3.cc/anotherdimension</p>
+<p>————————————</p>
+<p>1. 官方仅通过本站发布通知，切勿相信外部群聊、私信</p>
+<p>2. 社区交流请文明发言，禁止辱骂、引战、广告</p>
+<p>3. 禁止传播违规、违法、色情、暴力内容</p>
+<p>4. 遇到诈骗、骚扰请及时向官方反馈</p>
+<p>5. 官方不会以任何形式向用户索要密码、钱财</p>
+<br>
+<p style="color:#4cc9f0;font-weight:bold">一切以官网公告为准，谨防上当受骗！</p>
+</div>
+</div>
+<div class="card" style="margin-top:20px">
+<div class="card-title"><i class="fas fa-gavel"></i> 社区规则</div>
+<ul class="features">
+<li>文明交流，互相尊重</li>
+<li>禁止发布广告、垃圾信息</li>
+<li>禁止传播违规资源与内容</li>
+<li>禁止诈骗、引流、恶意营销</li>
+<li>遵守国家法律法规与平台规定</li>
+<li>违规将进行禁言、拉黑处理</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- 关于我们 -->
+<div id="about" class="page">
+<div class="card">
+<h1><i class="fas fa-info-circle"></i> 关于异次元</h1>
+<p class="description">平台介绍与理念</p>
+<div class="project-features">
+<div class="feature-item feature-free">
+<div class="feature-title"><i class="fas fa-check-circle"></i> 平台理念</div>
+<ul class="features">
+<li>专注分享，传播优质内容</li>
+<li>免费为主，服务广大用户</li>
+<li>安全稳定，持续更新维护</li>
+<li>严格审核，遵守法律法规</li>
+</ul>
+</div>
+<div class="feature-item feature-paid">
+<div class="feature-title"><i class="fas fa-heart"></i> 我们的目标</div>
+<ul class="features">
+<li>打造优质、安全、纯净的分享平台</li>
+<li>为用户提供稳定可靠的服务</li>
+<li>持续优化，不断提升体验</li>
+</ul>
+</div>
+</div>
+<div class="info" style="margin-top:20px">
+<h3><i class="fas fa-shield-alt"></i> 免责声明</h3>
+<p>本站所有内容均来自互联网，仅供学习交流使用，不承担任何法律责任，请在下载后24小时内删除！</p>
+</div>
+</div>
+</div>
+
+<footer>
+<p>© 2022-2026 异次元</p>
+</footer>
+
+<div id="copiedNotice" class="copied-notice" style="display:none">
+<i class="fas fa-check-circle"></i> <span>复制成功！</span>
+</div>
+</div>
+
+<!-- 资源详情弹窗 -->
+<div class="modal" id="modal">
+<div class="modal-back" onclick="closeModal()"></div>
+<div class="modal-box">
+<button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+<img class="modal-img" id="mImg" src="" alt="资源图片" onerror="this.style.display='none'">
+<h2 style="margin-bottom:10px" id="mTitle"></h2>
+<div style="color:#4cc9f0;margin-bottom:10px" id="mId"></div>
+<div style="margin-bottom:16px" id="mTags"></div>
+<div class="modal-detail" id="mDetail"></div>
+<a style="display:inline-block;background:#4361ee;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none" id="mLink" target="_blank">前往查看</a>
+</div>
+</div>
+
+<!-- 音乐播放器 -->
+<audio id="bgMusic" style="display:none;"></audio>
+
+<div class="music-player-container" style="position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+    <div class="music-controls" style="display:none;background:rgba(30,30,46,.95);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-radius:15px;padding:20px;width:300px;box-shadow:0 10px 30px rgba(0,0,0,.3)" id="musicPanel">
+        <div style="margin-bottom:15px;">
+            <div style="color:#4cc9f0;font-weight:600;margin-bottom:5px;font-size:1.1rem" id="currentSongTitle">未播放</div>
+            <div style="color:#a9a9a9;font-size:.9rem" id="currentSongInfo">准备播放...</div>
+            <div style="margin:15px 0;">
+                <div style="background:rgba(255,255,255,.1);height:4px;border-radius:2px;overflow:hidden;margin-bottom:5px">
+                    <div id="progressBar" style="background:linear-gradient(90deg,#4361ee,#4cc9f0);height:100%;width:0%;transition:width .3s"></div>
                 </div>
-
-                <div class="card-item glass rounded-xl overflow-hidden cursor-pointer"
-                     onclick="openModal('GitHub','https://picsum.photos/800/450?random=102','全球最大开源代码平台，可下载各类源码、脚本、项目，适合开发者学习和使用。','https://github.com')">
-                    <img src="https://picsum.photos/300/200?random=102" class="w-full h-32 object-cover">
-                    <div class="p-3 text-center font-medium">GitHub</div>
+                <div style="display:flex;justify-content:space-between;color:#a9a9a9;font-size:.8rem">
+                    <span id="currentTime">0:00</span>
+                    <span id="totalTime">0:00</span>
                 </div>
-
-                <div class="card-item glass rounded-xl overflow-hidden cursor-pointer"
-                     onclick="openModal('探探路识别','https://degenerator.cc.cd/file/AgACAgUAAyEGAATeys9MAAMRafxL4IRcH4WAUx92-DjuVscUAAFgAAKkEGsbaujhV-rJ6ePqYoe6AQADAgADeQADOwQ.jpg',`看到来路不明的二维码，不敢扫？先让它帮你“探探路”！
-
-介绍 QRfromPic，一个能让你安全识别任何图片二维码的在线神器！
-
-🚀 它能做什么？
-    ✅ 安全预览: 在你亲自扫描前，帮你提前“拆开”二维码，看看里面到底藏了什么，有效避免钓鱼链接和恶意软件！
-    ✅ 万物皆可识: 无论是手机截图、别人发的图片，还是电脑上的二维码，都能轻松识别。
-    ✅ 全能解析: 不仅能识别网址，还能解析 WiFi 密码、联系人名片、地理位置等各种信息。
-
-完全免费，无需注册，是你手机和电脑里必备的安全小工具。`,'https://qrfrompic.com/zh')">
-                    <img src="https://degenerator.cc.cd/file/AgACAgUAAyEGAATeys9MAAMRafxL4IRcH4WAUx92-DjuVscUAAFgAAKkEGsbaujhV-rJ6ePqYoe6AQADAgADeQADOwQ.jpg" class="w-full h-32 object-cover">
-                    <div class="p-3 text-center font-medium">探探路识别</div>
-                </div>
-
             </div>
-        </section>
-
-        <section>
-            <h3 class="text-xl font-bold mb-5 flex items-center">
-                <i class="fa fa-gamepad text-primary mr-2"></i> 游戏资源
-            </h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-                <div class="card-item glass rounded-xl overflow-hidden cursor-pointer"
-                     onclick="openModal('Roblox','https://picsum.photos/800/450?random=201','Roblox 大型创作游戏平台，可玩各种同人游戏、也可以自己制作游戏，支持脚本和自定义内容。','https://www.roblox.com')">
-                    <img src="https://picsum.photos/300/200?random=201" class="w-full h-32 object-cover">
-                    <div class="p-3 text-center font-medium">Roblox</div>
-                </div>
-                
-                <div class="card-item glass rounded-xl overflow-hidden cursor-pointer"
-                     onclick="openModal('探探路识别','https://degenerator.cc.cd/file/AgACAgUAAyEGAATeys9MAAMRafxL4IRcH4WAUx92-DjuVscUAAFgAAKkEGsbaujhV-rJ6ePqYoe6AQADAgADeQADOwQ.jpg',`🔥 学生党福利！白嫖各种教育优惠，你需要这个 .edu 临时邮箱！🔥
-
-还在为没有 .edu 邮箱而错过各种学生优惠而烦恼吗？介绍 iMail，一个能帮你免费生成临时教育邮箱的神器！
-
-✨ 它能帮你做什么？
-    ✅ 注册各种教育优惠: 例如 GitHub 学生包, Microsoft 365 教育版, JetBrains 全家桶...
-    ✅ 临时注册: 用于需要教育邮箱验证的网站或服务。
-    ✅ 保护隐私: 无需使用你的真实学校邮箱，避免垃圾邮件。
-
-这是一个非常稀有的资源，建议立即收藏！`,'https://qrfrompic.com/zh')">
-                    <img src="https://degenerator.cc.cd/file/AgACAgUAAyEGAATeys9MAAMRafxL4IRcH4WAUx92-DjuVscUAAFgAAKkEGsbaujhV-rJ6ePqYoe6AQADAgADeQADOwQ.jpg" class="w-full h-32 object-cover">
-                    <div class="p-3 text-center font-medium">探探路识别</div>
-                </div>
-                
-            </div>
-        </section>
-    </main>
-
-    <footer class="text-center text-gray-500 mt-16 text-sm">
-        © 2026 异次元 | degenerator@foxmail.com
-    </footer>
+        </div>
+        <div style="display:flex;justify-content:center;align-items:center;gap:15px;margin-bottom:20px">
+            <button onclick="prevSong()" class="music-btn" style="background:transparent;border:1px solid rgba(76,201,240,.3);color:#4cc9f0;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:1rem;transition:all .3s"><i class="fas fa-backward"></i></button>
+            <button onclick="toggleMusic()" class="music-btn" style="background:linear-gradient(90deg,#4361ee,#3a0ca3);color:#fff;border:none;border-radius:50%;width:50px;height:50px;cursor:pointer;font-size:1.2rem;transition:all .3s"><i id="musicIcon" class="fas fa-play"></i></button>
+            <button onclick="nextSong()" class="music-btn" style="background:transparent;border:1px solid rgba(76,201,240,.3);color:#4cc9f0;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:1rem;transition:all .3s"><i class="fas fa-forward"></i></button>
+        </div>
+        <div style="margin-bottom:15px;">
+            <div style="color:#a9a9a9;margin-bottom:8px;font-size:.9rem;display:flex;align-items:center;gap:8px"><i class="fas fa-volume-up"></i> 音量</div>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.3" style="width:100%;height:5px;background:rgba(255,255,255,.1);border-radius:3px;outline:none;-webkit-appearance:none">
+        </div>
+        <div>
+            <div style="color:#a9a9a9;margin-bottom:10px;font-size:.9rem;display:flex;align-items:center;gap:8px"><i class="fas fa-list"></i> 播放列表 (<span id="songCount">0</span>)</div>
+            <div id="playlist" style="max-height:150px;overflow-y:auto;background:rgba(255,255,255,.05);border-radius:8px;padding:10px"></div>
+        </div>
+    </div>
+    <button onclick="toggleMusicPanel()" class="music-main-btn" style="background:linear-gradient(90deg,#4361ee,#3a0ca3);color:#fff;border:none;border-radius:50%;width:50px;height:50px;cursor:pointer;font-size:1.2rem;box-shadow:0 4px 12px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;transition:all .3s"><i class="fas fa-music"></i></button>
 </div>
 
 <script>
-    function openModal(title, img, desc, link) {
-        document.getElementById('modalTitle').innerText = title;
-        document.getElementById('modalImg').src = img;
-        document.getElementById('modalDesc').innerText = desc;
-        document.getElementById('modalLink').href = link;
-        const modal = document.getElementById('modal');
-        const box = modal.querySelector('.modal-wrap');
-        modal.classList.remove('hidden');
-        setTimeout(() => {
-            box.classList.remove('modal-hide');
-            box.classList.add('modal-show');
-        }, 10);
+const SITE_BG_IMAGE = "https://i.ibb.co/tpGNS11g/Image-1778322088861.jpg";
+const LOGO_IMAGE_URL = "https://i.ibb.co/jPhQVrbT/13161330613.jpg";
+
+const CATEGORIES = {
+    "全部": { icon: "fa-th-list", subs: [] },
+    "其他": { icon: "fa-ellipsis-h", subs: ["实用", "其他资源", "未分类", "剪辑工具", "工具"] },
+    "视频": { icon: "fa-video", subs: ["追剧", "追番", "电影", "其他"] },
+    "书": { icon: "fa-book", subs: ["小说", "电子书", "其他"] },
+    "Ai": { icon: "fa-robot", subs: ["中转站", "免费站", "镜像站", "特殊渠道", "角色扮演", "其他", "API", "AI画图"] },
+    "漫画": { icon: "fa-book-open", subs: ["18禁", "漫画网", "漫画APP", "其他"] },
+    "VPN": { icon: "fa-shield-halved", subs: ["机场", "中转", "VPS", "VPNapp", "其他"] },
+    "18禁": { icon: "fa-exclamation-triangle", subs: ["视频", "小说", "漫画", "其他", "社区", "游戏"] },
+    "社交": { icon: "fa-comments", subs: ["社区", "18禁社区", "其他"] },
+    "音乐": { icon: "fa-music", subs: ["app", "网页", "音乐网", "破解", "其他"] },
+    "邮箱": { icon: "fa-envelope", subs: ["无限邮箱", "教育邮箱", "其他"] },
+    "网盘": { icon: "fa-cloud", subs: ["p2p", "免费网盘", "付费网盘", "其他"] },
+    "模拟器": { icon: "fa-desktop", subs: ["PC模拟器", "手机模拟器", "其他"] }
+};
+
+const MUSIC_PLAYLIST = [
+    { title: "荒", artist: "???", url: "https://raw.githubusercontent.com/StarryRing/Test001/refs/heads/main/Wilderness.mp3", duration: "2:55" }
+];
+
+function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    document.querySelector(`.nav-btn[onclick*="${pageId}"]`).classList.add('active');
+    history.replaceState(null, null, '#' + pageId);
+    window.scrollTo(0, 0);
+}
+
+function toggleMobileMenu() {
+    document.getElementById('mobileNav').classList.toggle('active');
+}
+
+// 资源数据
+const resData = {
+ // 资源数据 - re开头（资源页）
+    re001:{
+        title:"禁漫天堂",
+        id:"re001",
+        desc:"全球知名漫画大平台",
+        link:"https://bestfile.io/16YGb4wkJfsOz9y/file",
+        img:"",
+        cat:"18禁",subcat:"漫画",
+        detailDesc:`
+            <p><span class="highlight">🔞全球知名漫画大平台</span>☞禁漫天堂☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>看片,看漫画,看小说</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机必备平台</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    re002:{
+    title:"推特",
+    id:"re002",
+    desc:"全球知名社区",
+    link:"https://bestfile.io/AJNhUPH3Dtk38nC/file",
+    img:"",
+    cat:"社交",subcat:"18禁社区",
+    detailDesc:`
+            <p><span class="highlight">🔞全球知名社区</span>☞ 推特☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>有福利姬...等等</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机必备平台</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    re003:{
+    title:"Eh站",
+    id:"re003",
+    desc:"知名漫画平台",
+    link:"https://bestfile.io/iZQqtmYDtXAcd1M/file",
+    img:"",
+    cat:"18禁",subcat:"漫画",
+    detailDesc:`
+            <p><span class="highlight">🔞知名漫画大平台</span>☞E站☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>看漫画，很多猎奇内容！</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机必备平台</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    re004:{
+    title:"绿茶VPN",
+    id:"re004",
+    desc:"免费的VPN",
+    link:"https://bestfile.io/rXW5w0UuYFRCpjw/file",
+    img:"",
+    cat:"VPN",subcat:"VPNapp",
+    detailDesc:`
+            <p><span class="highlight">VPN</span>☞免费☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>免费用的还行吧，速度日常应该够用了，想快点可付费</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 可当备用VPN</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    re005:{
+    title:"酷我音乐",
+    id:"re005",
+    desc:"音乐平台",
+    link:"https://bestfile.io/msi47SpLscIMsZD/file",
+    img:"",
+    cat:"音乐",subcat:"破解",
+    detailDesc:`
+            <p><span class="highlight">酷我音乐平台</span>☞破解版☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>已破解会员限制,可与正版共存</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 喜欢听音乐的好用</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    re006:{
+    title:"纸飞机",
+    id:"re006",
+    desc:"全球知名加密通讯平台",
+    link:"https://wwavl.lanzouu.com/b00yb0chub",
+    img:"",
+    cat:"社交",subcat:"18禁社区",
+    detailDesc:`
+            <p><span class="highlight">全球知名加密通讯平台</span>☞TG☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>加密通讯,匿名数据</li>
+                <li>看片 看小说 看漫画 应有尽有</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机强烈必备</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    re007:{
+    title:"MiraiMind",
+    id:"re007",
+    desc:"角色扮演平台",
+    link:"https://wwavl.lanzouu.com/b00yb2npxa",
+    img:"",
+    cat:"Ai",subcat:"角色扮演",
+    detailDesc:`
+            <p><span class="highlight">AI角色扮演平台</span>☞ 角色扮演☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>与设定好的AI对话,可以进行聊天</li>
+                <li>也可以自行添加设定</li>
+                <li>免费使用有限制</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机必备平台</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    re008:{
+    title:"A站",
+    id:"re008",
+    desc:"🔞知名动漫平台",
+    link:"https://wwavl.lanzouu.com/b00yb2s1sb",
+    img:"",
+    cat:"18禁",subcat:"视频",
+    detailDesc:`
+            <p><span class="highlight">🔞知名动漫大平台</span>☞A站☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>里番，3d大片，动漫，动画...</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机必备平台</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    
+    // 分享数据 - ra开头（分享页）
+    ra001:{
+    title:"绿茶VPN",
+    id:"ra001",
+    desc:"免费VPN",
+    link:"https://www.lvcha.org",
+    img:"",
+    cat:"VPN",subcat:"VPNapp",
+    detailDesc:`
+            <p><span class="highlight">VPN</span>☞免费☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>免费用的还行吧，速度日常应该够用了，想快点可付费</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 可当备用VPN</p>
+            <p style="margin-top:10px;color:#4caf50">✅ 免费 · 无广告</p>
+        `
+    },
+    
+    ra002:{
+    title:"白马VPN",
+    id:"ra002",
+    desc:"免费VPN",
+    link:"https://www.pquiz.cn",
+    img:"",
+    cat:"VPN",subcat:"VPNapp",
+    detailDesc:`
+            <p><span class="highlight">VPN</span>☞免费☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>免费模式每次开启需要看广一次,免费用的还行吧，速度日常应该够用了，想快点可付费</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 可当备用VPN</p>
+            <p style="margin-top:10px;color:#4caf50">✅ 免费 · 有广告</p>
+        `
+    },
+    
+    ra003:{
+    title:"低价机场_宝可梦",
+    id:"ra003",
+    desc:"低价机场",
+    link:"https://love.p6m6.com/#/register?code=HpOqf0pu",
+    img:"",
+    cat:"VPN",subcat:"机场",
+    detailDesc:`
+            <p><span class="highlight">VPN</span>☞超低价☜</p>
+            <hr class="divider">
+            <p><strong>✨ 介绍：</strong></p>
+            <ul>
+                <li>每个套餐价格都很低,速度还行,节点纯净度还行</li>
+                <li>⚠️提示: 套餐只推荐购买月付, 买年付，季付 或买断 到时候跑路了你也用不了</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 可当备用VPN</p>
+            <p style="margin-top:10px;color:#4caf50">✅ 套餐价格低</p>
+        `
+    },
+    
+    ra004:{
+    title:"低价机场_便宜机场",
+    id:"ra004",
+    desc:"低价机场",
+    link:"https://xn--wtq35pfyd55o.co/#/register?code=h45djrru",
+    img:"",
+    cat:"VPN",subcat:"机场",
+    ddetailDesc:`
+            <p><span class="highlight">VPN</span>☞超低价☜</p>
+            <hr class="divider">
+            <p><strong>✨ 介绍：</strong></p>
+            <ul>
+                <li>每个套餐价格都很低,速度还行,节点纯净度还行</li>
+                <li>⚠️提示: 套餐只推荐购买月付, 买年付，季付 或买断 到时候跑路了你也用不了</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 可当备用VPN</p>
+            <p style="margin-top:10px;color:#4caf50">✅ 套餐价格低</p>
+        `
+    },
+    
+    ra005:{
+    title:"低价机场_一元机场",
+    id:"ra005",
+    desc:"低价机场",
+    link:"https://xn--4gq62f52gdss.top/#/register?code=dLDceiCC",
+    img:"",
+    cat:"VPN",subcat:"机场",
+    detailDesc:`
+            <p><span class="highlight">VPN</span>☞超低价☜</p>
+            <hr class="divider">
+            <p><strong>✨ 介绍：</strong></p>
+            <ul>
+                <li>每个套餐价格都很低,速度还行,节点纯净度还行</li>
+                <li>⚠️提示: 套餐只推荐购买月付, 买年付，季付 或买断 到时候跑路了你也用不了</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 可当备用VPN</p>
+            <p style="margin-top:10px;color:#4caf50">✅ 套餐价格低</p>
+        `
+    },
+    
+    ra006:{
+    title:"低价机场_两元店",
+    id:"ra006",
+    desc:"低价机场",
+    link:"https://xn--5hqx9equq.com/#/register?code=EOooTHRj",
+    img:"",
+    cat:"VPN",subcat:"机场",
+    detailDesc:`
+            <p><span class="highlight">VPN</span>☞超低价☜</p>
+            <hr class="divider">
+            <p><strong>✨ 介绍：</strong></p>
+            <ul>
+                <li>每个套餐价格都很低,速度还行,节点纯净度还行</li>
+                <li>⚠️提示: 套餐只推荐购买月付, 买年付，季付 或买断 到时候跑路了你也用不了</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 可当备用VPN</p>
+            <p style="margin-top:10px;color:#4caf50">✅ 套餐价格低</p>
+        `
+    },
+    
+    ra007:{
+    title:"低价机场_星链机场",
+    id:"ra007",
+    desc:"低价机场",
+    link:"https://xn--mes995ajya725k.com/#/register?code=iY9CyeRf",
+    img:"",
+    cat:"VPN",subcat:"机场",
+    detailDesc:`
+            <p><span class="highlight">VPN</span>☞超低价☜</p>
+            <hr class="divider">
+            <p><strong>✨ 介绍：</strong></p>
+            <ul>
+                <li>每个套餐价格都很低,速度还行,节点纯净度还行</li>
+                <li>⚠️提示: 套餐只推荐购买月付, 买年付，季付 或买断 到时候跑路了你也用不了</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 可当备用VPN</p>
+            <p style="margin-top:10px;color:#4caf50">✅ 套餐价格低</p>
+        `
+    },
+    
+    ra008:{
+    title:"AcFan站",
+    id:"ra008",
+    desc:"🔞知名动漫平台",
+    link:"https://acfanzhk_12310959_309v1me8.d3daopba.work?p=L3LG8T",
+    img:"",
+    cat:"18禁",subcat:"视频",
+    detailDesc:`
+            <p><span class="highlight">🔞知名动漫大平台</span>☞A站☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>里番，3d大片，动漫，动画...</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机必备平台</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    ra009:{
+    title:"禁漫天堂",
+    id:"ra009",
+    desc:"🔞全球知名漫画大平台",
+    link:"http://18comic.vip",
+    img:"",
+    cat:"18禁",subcat:"漫画",
+    detailDesc:`
+            <p><span class="highlight">🔞全球知名漫画大平台</span>☞禁漫天堂☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>看片,看漫画,看小说</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机必备平台</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    ra010:{title:"海角",id:"ra010",desc:"请自行填写描述",link:"http://www.haijiao.com",img:"",cat:"18禁",subcat:"社区",detailDesc:`<p>知名社区平台</p>`},
+    
+    ra011:{
+    title:"嗶咔漫畫",
+    id:"ra011",
+    desc:"🔞全球知名漫画大平台",
+    link:"http://www.picacomic.com",
+    img:"",
+    cat:"18禁",subcat:"漫画",
+    detailDesc:`
+            <p><span class="highlight">🔞全球知名漫画大平台</span>☞嗶咔漫畫☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>看片,看漫画,看小说</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机必备平台</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    ra012:{
+    title:"EhViewer",
+    id:"ra012",
+    desc:"🔞知名漫画平台",
+    link:"https://github.com/xiaojieonly/Ehviewer_CN_SXJ/releases",
+    img:"",
+    cat:"18禁",subcat:"漫画",
+    detailDesc:`
+            <p><span class="highlight">🔞知名漫画大平台</span>☞E站☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>看漫画，很多猎奇内容！</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机必备平台</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    ra013:{title:"嘿嘿连载",id:"ra013",desc:"请自行填写描述",link:"https://tpxhko.com/",img:"",cat:"18禁",subcat:"漫画",detailDesc:`<p>黄色漫画平台</p>`},
+    
+    ra014:{title:"JK漫画",id:"ra014",desc:"请自行填写描述",link:"https://jkmh10.app/",img:"",cat:"18禁",subcat:"漫画",detailDesc:`<p>黄色漫画平台</p>`},
+    
+    ra015:{title:"猫咪社区",id:"ra015",desc:"请自行填写描述",link:"https://euaz3n.top/",img:"",cat:"18禁",subcat:"社区",detailDesc:`<p>较为知名黄色社区</p>`},
+    
+    ra016:{title:"汤头条",id:"ra016",desc:"请自行填写描述",link:"https://e73.jjnhdiirf.cc/",img:"",cat:"18禁",subcat:"视频",detailDesc:`<p>看大片平台</p>`},
+    
+    ra017:{title:"抖音成人版",id:"ra017",desc:"请自行填写描述",link:"https://d3w1ss77iosk6v.cloudfront.net/?pc=TBY4XB",img:"",cat:"18禁",subcat:"视频",detailDesc:`<p>黄色版</p>`},
+    
+    ra018:{title:"抖音成人版②",id:"ra018",desc:"请自行填写描述",link:"http://sextik.co/",img:"",cat:"18禁",subcat:"视频",detailDesc:`<p>黄色版</p>`},
+    
+    ra019:{title:"游多多",id:"ra019",desc:"请自行填写描述",link:"https://metasoco.com/nav_426281819.apk",img:"",cat:"18禁",subcat:"游戏",detailDesc:`<p>小黄油</p>`},
+    
+    ra020:{
+    title:"糖心",
+    id:"ra020",
+    desc:"🔞全球知名大片平台",
+    link:"tangxinweb.com",
+    img:"",
+    cat:"18禁",subcat:"视频",
+    detailDesc:`
+            <p><span class="highlight">🔞全球华人圈大平台</span>☞糖心传媒☜</p>
+            <hr class="divider">
+            <p><strong>✨ 介绍：</strong></p>
+            <ul>
+                <li>很多大片出自这里</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机必备平台</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    ra021:{
+    title:"pixiv",
+    id:"ra021",
+    desc:"全球知名漫画平台",
+    link:"https://www.pixiv.net",
+    img:"",
+    cat:"18禁",subcat:"漫画",
+    detailDesc:`
+            <p><span class="highlight">🔞全球知名大平台</span>☞P站☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li> 众多18禁 画 出自这里</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机必备平台</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    ra022:{
+    title:"pornhub",
+    id:"ra022",
+    desc:"全球知名黄色平台",
+    link:"https://cn.pornhub.com",
+    img:"",
+    cat:"18禁",subcat:"视频",
+    detailDesc:`
+            <p><span class="highlight">🔞知名大平台</span>☞P站☜</p>
+            <hr class="divider">
+            <p><strong>✨ 核心功能：</strong></p>
+            <ul>
+                <li>完全免费！看众多大作</li>
+            </ul>
+            <hr class="divider">
+            <p><strong>📌 推荐理由：</strong> 老司机必备平台</p>
+            <p style="margin-top:10px;color:#ff9800">⭐ 强烈推荐！</p>
+        `
+    },
+    
+    ra023:{title:"iwara",id:"ra023",desc:"请自行填写描述",link:"https://www.iwara.tv",img:"",cat:"18禁",subcat:"视频",detailDesc:`<p>3d大作，大多出自这</p>`},
+    
+    ra024:{title:"rule34video",id:"ra024",desc:"请自行填写描述",link:"https://rule34video.com",img:"",cat:"18禁",subcat:"视频",detailDesc:`<p>看片的</p>`},
+    
+    ra025:{title:"hanime1",id:"ra025",desc:"请自行填写描述",link:"https://hanime1.me",img:"",cat:"18禁",subcat:"视频",detailDesc:`<p>里番多</p>`},
+    
+    ra026:{title:"Rule34gg",id:"ra026",desc:"请自行填写描述",link:"https://rule34.gg/",img:"",cat:"18禁",subcat:"漫画",detailDesc:`<p>看漫画的</p>`},
+    
+    ra027:{title:"Animeko",id:"ra027",desc:"请自行填写描述",link:"https://animeko.org/",img:"",cat:"视频",subcat:"追番",detailDesc:`<p>追番必备！</p>`},
+    
+    ra028:{title:"omofun",id:"ra028",desc:"请自行填写描述",link:"https://www.233dm.com/app/",img:"",cat:"视频",subcat:"追番",detailDesc:`<p>追番必备！</p>`},
+    
+    ra029:{title:"风车动漫",id:"ra029",desc:"请自行填写描述",link:"m.fcdm.org.cn",img:"",cat:"视频",subcat:"追番",detailDesc:`<p>追番必备！</p>`},
+    
+    ra030:{title:"AGE动漫",id:"ra030",desc:"请自行填写描述",link:"agedongman.net",img:"",cat:"视频",subcat:"追番",detailDesc:`<p>追番必备！/p>`},
+    
+    ra031:{title:"韩剧TV",id:"ra031",desc:"请自行填写描述",link:"hanjtv.net",img:"",cat:"视频",subcat:"追剧",detailDesc:`<p>追韩剧必备！</p>`},
+    
+    ra032:{title:"电影天堂",id:"ra032",desc:"请自行填写描述",link:"https://m.dytttt.com/",img:"",cat:"视频",subcat:"电影",detailDesc:`<p>追电影必备！</p>`},
+    
+    ra033:{title:"樱花动漫",id:"ra033",desc:"请自行填写描述",link:"yinghuadongman.com.cn",img:"",cat:"视频",subcat:"追番",detailDesc:`<p>追番必备！</p>`},
+    
+    ra034:{title:"OMOOTV",id:"ra034",desc:"请自行填写描述",link:"https://fb.omoo.tv/",img:"",cat:"视频",subcat:"追番",detailDesc:`<p>追番必备！</p>`},
+    
+    ra035:{title:"动漫共和国",id:"ra035",desc:"请自行填写描述",link:"https://animerep.com/",img:"",cat:"视频",subcat:"追番",detailDesc:`<p>追番必备！</p>`},
+    
+    ra036:{title:"囧次元",id:"ra036",desc:"请自行填写描述",link:"https://www.jcyapp.cn/",img:"",cat:"视频",subcat:"追番",detailDesc:`<p>追番必备！</p>`},
+    
+    ra037:{title:"漫岛动漫",id:"ra037",desc:"请自行填写描述",link:"https://www.mandao.cc/",img:"",cat:"视频",subcat:"追番",detailDesc:`<p>追番必备！</p>`},
+    
+    ra038:{title:"无名图书",id:"ra038",desc:"请自行填写描述",link:"https://www.book345.com/",img:"",cat:"书",subcat:"电子书",detailDesc:`<p>喜欢看电子书的可以用这个</p>`},
+    
+    ra039:{title:"读书知己",id:"ra039",desc:"请自行填写描述",link:"https://book.sv/",img:"",cat:"视频",subcat:"电子书",detailDesc:`<p>喜欢看电子书的可以用这个</p>`},
+    
+    ra040:{title:"📧无限临时邮箱①",id:"ra040",desc:"请自行填写描述",link:"https://mail.sunls.de/",img:"",cat:"邮箱",subcat:"无限邮箱",detailDesc:`<p>好用的无限临时邮箱</p>`},
+    
+    ra041:{title:"PrivyDrop",id:"ra041",desc:"请自行填写描述",link:"https://www.privydrop.app/zh",img:"",cat:"网盘",subcat:"p2p",detailDesc:`<p>p2p传输方式,可将一个大文件传送给另外一个人</p>`},
+    
+    ra042:{title:"免费短网址服务",id:"ra042",desc:"请自行填写描述",link:"https://789.st/",img:"",cat:"其他",subcat:"实用",detailDesc:`<p> 链接过长？可以用这个 缩短链接</p>`},
+    
+    ra043:{title:"GitDB (GitHub搜索引擎)",id:"ra043",desc:"请自行填写描述",link:"https://gitdb.net/",img:"",cat:"其他",subcat:"实用",detailDesc:`<p>还在为寻找项目而烦恼？用这个吧 非常好用</p>`},
+    
+    ra044:{title:"📧临时教育邮箱",id:"ra044",desc:"请自行填写描述",link:"https://imail.edu.vn/",img:"",cat:"邮箱",subcat:"教育邮箱",detailDesc:`<p>临时的教育邮箱，这类型很稀缺，赶快收藏吧！</p>`},
+    
+    ra045:{title:"Pikimov",id:"ra045",desc:"请自行填写描述",link:"https://pikimov.com/",img:"",cat:"其他",subcat:"剪辑工具",detailDesc:`<p>剪辑工具</p>`},
+    
+    ra046:{title:"Windows 模拟器",id:"ra046",desc:"请自行填写描述",link:"https://github.com/brunodev85/winlator",img:"",cat:"模拟器",subcat:"PC模拟器",detailDesc:`<p>很知名的pc模拟器,对设备要求高！</p>`},
+    
+    ra047:{title:"anytocopy",id:"ra047",desc:"请自行填写描述",link:"https://www.anytocopy.com/",img:"",cat:"其他",subcat:"工具",detailDesc:`<p>工具</p>`},
+    
+    ra048:{title:"FliiipBook",id:"ra048",desc:"请自行填写描述",link:"https://www.fliiipbook.com/",img:"",cat:"其他",subcat:"其他资源",detailDesc:`<p>想亲手画一个属于自己的 GIF 吗？这个网站让你秒变动画师</p>`},
+    
+    ra049:{title:"RealDubbing",id:"ra049",desc:"请自行填写描述",link:"https://realdubbing.com/zh",img:"",cat:"其他",subcat:"工具",detailDesc:`<p>工具</p>`},
+    
+    ra050:{title:"bytez",id:"ra050",desc:"请自行填写描述",link:"https://bytez.com/models",img:"",cat:"Ai",subcat:"API",detailDesc:`<p>很多AI大模型，可调用API</p>`},
+    
+    ra051:{title:"zenmux",id:"ra051",desc:"请自行填写描述",link:"https://zenmux.ai/",img:"",cat:"Ai",subcat:"中转站",detailDesc:`<p>API大模型中转站</p>`},
+    
+    ra052:{title:"wallpaper",id:"ra052",desc:"请自行填写描述",link:"https://www.wallpaper.fm/",img:"",cat:"Ai",subcat:"AI画图",detailDesc:`<p>AI帮你画作</p>`},
+    
+    ra053:{title:"zumie",id:"ra053",desc:"请自行填写描述",link:"https://zumie.io/",img:"",cat:"其他",subcat:"剪辑工具",detailDesc:`<p>剪辑工具</p>`},
+    
+    ra054:{title:"ChatGPT 镜像站",id:"ra054",desc:"请自行填写描述",link:"https://hohai.eu.org/",img:"",cat:"Ai",subcat:"镜像站",detailDesc:`<p>可免费使用的 镜像站</p>`},
+    
+    ra055:{title:"AI 工具导航站",id:"ra055",desc:"请自行填写描述",link:"https://fmhy.net/ai",img:"",cat:"Ai",subcat:"其他",detailDesc:`<p>导航工具</p>`}
+};
+
+let currentResCat = "全部";
+let currentResSub = "";
+let currentShareCat = "全部";
+let currentShareSub = "";
+
+function initCategories() {
+    const resMain = document.getElementById('resCategoryMain');
+    resMain.innerHTML = '';
+    Object.keys(CATEGORIES).forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'cat-btn' + (cat === '全部' ? ' active' : '');
+        btn.innerHTML = `<i class="fas ${CATEGORIES[cat].icon}"></i> ${cat}`;
+        btn.onclick = () => selectCategory('res', cat);
+        resMain.appendChild(btn);
+    });
+    updateSubCategories('res', '全部');
+    
+    const shareMain = document.getElementById('shareCategoryMain');
+    shareMain.innerHTML = '';
+    Object.keys(CATEGORIES).forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'cat-btn' + (cat === '全部' ? ' active' : '');
+        btn.innerHTML = `<i class="fas ${CATEGORIES[cat].icon}"></i> ${cat}`;
+        btn.onclick = () => selectCategory('share', cat);
+        shareMain.appendChild(btn);
+    });
+    updateSubCategories('share', '全部');
+}
+
+function selectCategory(type, cat) {
+    const prefix = type === 'res' ? 'res' : 'share';
+    const mainContainer = document.getElementById(prefix + 'CategoryMain');
+    mainContainer.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.trim() === cat || btn.innerHTML.includes(`>${cat}<`));
+    });
+    if(type === 'res') { currentResCat = cat; currentResSub = ""; }
+    else { currentShareCat = cat; currentShareSub = ""; }
+    updateSubCategories(type, cat);
+    filterByCategory(type);
+}
+
+function updateSubCategories(type, cat) {
+    const prefix = type === 'res' ? 'res' : 'share';
+    const subContainer = document.getElementById(prefix + 'CategorySub');
+    const subs = CATEGORIES[cat]?.subs || [];
+    if(subs.length === 0) { subContainer.innerHTML = '<span class="sub-placeholder">暂无小分类</span>'; return; }
+    subContainer.innerHTML = '';
+    const allBtn = document.createElement('button');
+    allBtn.className = 'sub-cat-btn active';
+    allBtn.textContent = '全部';
+    allBtn.onclick = () => selectSubCategory(type, '');
+    subContainer.appendChild(allBtn);
+    subs.forEach(sub => {
+        const btn = document.createElement('button');
+        btn.className = 'sub-cat-btn';
+        btn.textContent = sub;
+        btn.onclick = () => selectSubCategory(type, sub);
+        subContainer.appendChild(btn);
+    });
+}
+
+function selectSubCategory(type, sub) {
+    const prefix = type === 'res' ? 'res' : 'share';
+    const subContainer = document.getElementById(prefix + 'CategorySub');
+    subContainer.querySelectorAll('.sub-cat-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent === sub || (sub === '' && btn.textContent === '全部'));
+    });
+    if(type === 'res') currentResSub = sub;
+    else currentShareSub = sub;
+    filterByCategory(type);
+}
+
+function filterByCategory(type) {
+    const listId = type === 'res' ? 'resList' : 'shareList';
+    const currentCat = type === 'res' ? currentResCat : currentShareCat;
+    const currentSub = type === 'res' ? currentResSub : currentShareSub;
+    document.querySelectorAll('#' + listId + ' .res-card').forEach(el => {
+        const cardCat = el.dataset.cat || '';
+        const cardSub = el.dataset.subcat || '';
+        let show = true;
+        if(currentCat !== '全部' && cardCat !== currentCat) show = false;
+        if(show && currentSub !== '' && cardSub !== currentSub) show = false;
+        el.style.display = show ? 'block' : 'none';
+    });
+}
+
+function openModal(key) {
+    const d = resData[key];
+    if(!d) return;
+    const imgEl = document.getElementById("mImg");
+    if(d.img) { imgEl.src = d.img; imgEl.style.display = "block"; }
+    else { imgEl.style.display = "none"; }
+    document.getElementById("mTitle").innerText = d.title;
+    const prefix = key.startsWith('re') ? '资源ID' : '分享ID';
+    document.getElementById("mId").innerText = prefix + "：" + d.id;
+    const tagsEl = document.getElementById("mTags");
+    if(d.cat && d.subcat) { tagsEl.innerHTML = `<span class="cat-tag cat-tag-main">${d.cat}</span><span class="cat-tag cat-tag-sub">${d.subcat}</span>`; }
+    else if(d.cat) { tagsEl.innerHTML = `<span class="cat-tag cat-tag-main">${d.cat}</span>`; }
+    else { tagsEl.innerHTML = ''; }
+    document.getElementById("mDetail").innerHTML = d.detailDesc || d.desc;
+    document.getElementById("mLink").href = d.link;
+    document.getElementById("modal").style.display = "flex";
+}
+function closeModal() { document.getElementById("modal").style.display = "none"; }
+
+function searchRes() {
+    const kw = document.getElementById("searchRes").value.toLowerCase().trim();
+    document.querySelectorAll("#resList .res-card").forEach(el => {
+        const matchSearch = el.innerText.toLowerCase().includes(kw);
+        if(currentResCat !== '全部' || currentResSub !== '') {
+            const cardCat = el.dataset.cat || '';
+            const cardSub = el.dataset.subcat || '';
+            let matchCat = true;
+            if(currentResCat !== '全部' && cardCat !== currentResCat) matchCat = false;
+            if(matchCat && currentResSub !== '' && cardSub !== currentResSub) matchCat = false;
+            el.style.display = (matchSearch && matchCat) ? 'block' : 'none';
+        } else { el.style.display = matchSearch ? 'block' : 'none'; }
+    });
+}
+function searchShare() {
+    const kw = document.getElementById("searchShare").value.toLowerCase().trim();
+    document.querySelectorAll("#shareList .res-card").forEach(el => {
+        const matchSearch = el.innerText.toLowerCase().includes(kw);
+        if(currentShareCat !== '全部' || currentShareSub !== '') {
+            const cardCat = el.dataset.cat || '';
+            const cardSub = el.dataset.subcat || '';
+            let matchCat = true;
+            if(currentShareCat !== '全部' && cardCat !== currentShareCat) matchCat = false;
+            if(matchCat && currentShareSub !== '' && cardSub !== currentShareSub) matchCat = false;
+            el.style.display = (matchSearch && matchCat) ? 'block' : 'none';
+        } else { el.style.display = matchSearch ? 'block' : 'none'; }
+    });
+}
+
+// 音乐播放器
+const music = document.getElementById('bgMusic');
+let currentSongIndex = 0;
+let isPlaying = false;
+let userInteracted = false;
+let isPanelOpen = false;
+let updateInterval;
+
+function initMusicPlayer() {
+    loadSong(currentSongIndex);
+    renderPlaylist();
+    music.addEventListener('ended', nextSong);
+    music.addEventListener('timeupdate', updateProgress);
+    music.addEventListener('loadedmetadata', updateSongInfo);
+    document.getElementById('volumeSlider').addEventListener('input', function() { music.volume = this.value; });
+    music.volume = 0.3;
+    setupAutoplay();
+}
+
+function loadSong(index) {
+    if (index < 0 || index >= MUSIC_PLAYLIST.length) return;
+    currentSongIndex = index;
+    const song = MUSIC_PLAYLIST[index];
+    music.src = song.url;
+    updateCurrentSongDisplay();
+    if (isPlaying) { music.play().catch(e => console.log('播放失败:', e)); }
+}
+
+function updateCurrentSongDisplay() {
+    const song = MUSIC_PLAYLIST[currentSongIndex];
+    document.getElementById('currentSongTitle').textContent = song.title;
+    document.getElementById('currentSongInfo').textContent = `${song.artist} • ${song.duration}`;
+    document.querySelectorAll('.playlist-item').forEach((item, index) => {
+        if (index === currentSongIndex) {
+            item.style.background = 'rgba(76,201,240,.2)';
+            item.style.borderLeft = '3px solid #4cc9f0';
+        } else {
+            item.style.background = 'transparent';
+            item.style.borderLeft = '3px solid transparent';
+        }
+    });
+}
+
+function renderPlaylist() {
+    const playlistContainer = document.getElementById('playlist');
+    document.getElementById('songCount').textContent = MUSIC_PLAYLIST.length;
+    playlistContainer.innerHTML = '';
+    MUSIC_PLAYLIST.forEach((song, index) => {
+        const item = document.createElement('div');
+        item.className = 'playlist-item';
+        item.style.cssText = 'padding:10px;margin-bottom:5px;border-radius:5px;cursor:pointer;transition:all .3s;display:flex;justify-content:space-between;align-items:center';
+        item.innerHTML = `<div><div style="color:${index === currentSongIndex ? '#4cc9f0' : '#e0e0e0'};font-weight:${index === currentSongIndex ? '600' : '400'}">${song.title}</div><div style="color:#a9a9a9;font-size:.8rem">${song.artist} • ${song.duration}</div></div>${index === currentSongIndex ? '<i class="fas fa-play" style="color:#4cc9f0;font-size:.8rem"></i>' : ''}`;
+        item.addEventListener('click', () => { loadSong(index); if (!isPlaying) playMusic(); });
+        playlistContainer.appendChild(item);
+    });
+}
+
+function toggleMusic() { if (isPlaying) pauseMusic(); else playMusic(); }
+
+function playMusic() {
+    music.play().then(() => { isPlaying = true; document.getElementById('musicIcon').className = 'fas fa-pause'; startProgressUpdate(); }).catch(e => console.log('播放失败:', e));
+}
+
+function pauseMusic() { music.pause(); isPlaying = false; document.getElementById('musicIcon').className = 'fas fa-play'; stopProgressUpdate(); }
+
+function prevSong() {
+    let newIndex = currentSongIndex - 1;
+    if (newIndex < 0) newIndex = MUSIC_PLAYLIST.length - 1;
+    loadSong(newIndex);
+    if (isPlaying) playMusic();
+}
+
+function nextSong() {
+    let newIndex = currentSongIndex + 1;
+    if (newIndex >= MUSIC_PLAYLIST.length) newIndex = 0;
+    loadSong(newIndex);
+    if (isPlaying) playMusic();
+}
+
+function toggleMusicPanel() {
+    const panel = document.getElementById('musicPanel');
+    isPanelOpen = !isPanelOpen;
+    if (isPanelOpen) { panel.style.display = 'block'; setTimeout(() => { panel.style.opacity = '1'; panel.style.transform = 'translateY(0)'; }, 10); }
+    else { panel.style.opacity = '0'; panel.style.transform = 'translateY(10px)'; setTimeout(() => { panel.style.display = 'none'; }, 300); }
+}
+
+function updateProgress() {
+    if (!music.duration) return;
+    const progress = (music.currentTime / music.duration) * 100;
+    document.getElementById('progressBar').style.width = `${progress}%`;
+    document.getElementById('currentTime').textContent = formatTime(music.currentTime);
+    document.getElementById('totalTime').textContent = formatTime(music.duration);
+}
+
+function updateSongInfo() { document.getElementById('totalTime').textContent = formatTime(music.duration); }
+
+function startProgressUpdate() { stopProgressUpdate(); updateInterval = setInterval(updateProgress, 1000); }
+
+function stopProgressUpdate() { if (updateInterval) clearInterval(updateInterval); }
+
+function formatTime(seconds) {
+    if (isNaN(seconds)) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+function setupAutoplay() {
+    document.addEventListener('click', function initMusic() {
+        if (!userInteracted) { userInteracted = true; playMusic(); }
+        document.removeEventListener('click', initMusic);
+    });
+    window.addEventListener('load', function() {
+        setTimeout(() => { if (!userInteracted) playMusic().catch(e => {}); }, 1000);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const hash = location.hash.replace('#', '') || 'home';
+    showPage(hash);
+    document.getElementById('mobileMenuBtn').onclick = toggleMobileMenu;
+    
+    if(SITE_BG_IMAGE) {
+        const bgEl = document.getElementById('customBg');
+        bgEl.src = SITE_BG_IMAGE;
+        bgEl.style.display = 'block';
     }
-    function closeModal() {
-        const modal = document.getElementById('modal');
-        const box = modal.querySelector('.modal-wrap');
-        box.classList.remove('modal-show');
-        box.classList.add('modal-hide');
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 300);
+    
+    if(LOGO_IMAGE_URL) {
+        const logoImg = document.getElementById('logoImg');
+        const logoText = document.getElementById('logoText');
+        logoImg.src = LOGO_IMAGE_URL;
+        logoImg.style.display = 'block';
+        logoText.style.display = 'none';
     }
+    
+    initCategories();
+    initMusicPlayer();
+});
+window.addEventListener('hashchange', function() {
+    const hash = location.hash.replace('#', '') || 'home';
+    showPage(hash);
+});
 </script>
 </body>
 </html>
