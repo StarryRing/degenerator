@@ -184,6 +184,74 @@ footer{text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid r
 #playlist::-webkit-scrollbar-track {background:rgba(255,255,255,.05);border-radius:3px}
 #playlist::-webkit-scrollbar-thumb {background:rgba(76,201,240,.5);border-radius:3px}
 #volumeSlider::-webkit-slider-thumb {-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#4cc9f0;cursor:pointer}
+
+/* ===== 公告&广告弹窗样式 ===== */
+.popup-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,.7); backdrop-filter: blur(6px);
+    z-index: 99999; display: flex; align-items: center; justify-content: center;
+    padding: 20px; animation: popupFadeIn .3s ease;
+}
+@keyframes popupFadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+.popup-box {
+    background: rgba(26,26,46,.98); border: 1px solid rgba(76,201,240,.3);
+    border-radius: 16px; max-width: 520px; width: 100%; position: relative;
+    padding: 30px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+.popup-close {
+    position: absolute; top: 12px; right: 16px;
+    background: rgba(76,201,240,.12); border: none; color: #fff;
+    width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+    font-size: 15px; transition: all .3s; display: flex;
+    align-items: center; justify-content: center;
+}
+.popup-close:hover { background: rgba(76,201,240,.3); transform: rotate(90deg); }
+.popup-img {
+    width: 100%; max-height: 260px; object-fit: cover; border-radius: 12px;
+    margin-bottom: 18px; border: 1px solid rgba(76,201,240,.2); display: block;
+}
+.popup-title {
+    font-size: 1.4rem; font-weight: 700; color: #4cc9f0;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+}
+.popup-desc {
+    line-height: 1.8; color: #d0d0d0; font-size: 1rem; margin-bottom: 20px;
+}
+.popup-desc p { margin-bottom: 10px; }
+.popup-desc ul { padding-left: 20px; margin: 10px 0; }
+.popup-desc li { margin-bottom: 6px; }
+.popup-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(90deg,#4361ee,#3a0ca3); color: #fff;
+    border: none; padding: 12px 28px; border-radius: 10px;
+    font-size: 1rem; font-weight: 600; cursor: pointer;
+    text-decoration: none; transition: all .3s;
+}
+.popup-btn:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(67,97,238,.4); }
+.popup-btn-link {
+    background: linear-gradient(90deg,#f72585,#b5179e);
+}
+.popup-btn-link:hover { box-shadow: 0 6px 20px rgba(247,37,133,.4); }
+.popup-badge {
+    display: inline-block; padding: 3px 12px; border-radius: 12px;
+    font-size: .75rem; font-weight: 600; margin-bottom: 12px;
+}
+.badge-announce { background: rgba(247,37,133,.2); color: #f72585; }
+.badge-ad { background: rgba(255,215,0,.15); color: #ffd700; }
+.popup-buttons {
+    display: flex; gap: 10px; flex-wrap: wrap;
+}
+.popup-btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,.08); color: #ccc;
+    border: 1px solid rgba(255,255,255,.15); padding: 12px 20px; border-radius: 10px;
+    font-size: 1rem; font-weight: 500; cursor: pointer;
+    text-decoration: none; transition: all .3s;
+}
+.popup-btn-secondary:hover { background: rgba(255,255,255,.15); color: #fff; }
 </style>
 </head>
 <body>
@@ -1108,6 +1176,9 @@ footer{text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid r
     <button onclick="toggleMusicPanel()" class="music-main-btn" style="background:linear-gradient(90deg,#4361ee,#3a0ca3);color:#fff;border:none;border-radius:50%;width:50px;height:50px;cursor:pointer;font-size:1.2rem;box-shadow:0 4px 12px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;transition:all .3s"><i class="fas fa-music"></i></button>
 </div>
 
+<!-- ===== 公告&广告弹窗容器 ===== -->
+<div id="popupContainer"></div>
+
 <script>
 const SITE_BG_IMAGE = "https://i.ibb.co/tpGNS11g/Image-1778322088861.jpg";
 const LOGO_IMAGE_URL = "https://i.ibb.co/jPhQVrbT/13161330613.jpg";
@@ -1695,7 +1766,7 @@ const resData = {
             <hr class="divider">
             <p><strong>✨ 介绍：</strong></p>
             <ul>
-                <li>♾ 爱连VPN   注册就送“99999GB”流量</li>
+                <li>♾ 爱连VPN   注册就送"99999GB"流量</li>
                 <li>传家宝vpn-人走流量还在</li>
                 <li>🤔你还在花钱买机场和VPN？
 我不但免费，而且还是三网优化！</li>
@@ -1982,6 +2053,182 @@ document.addEventListener('DOMContentLoaded', function() {
     
     initCategories();
     initMusicPlayer();
+
+    // ===== 公告&广告弹窗配置 =====
+    // 【开关控制】enabled: true=显示, false=隐藏（无需删除代码，改这个就行）
+    const POPUP_CONFIG = {
+        // ---- 公告 ----
+        announcement: {
+            enabled: true,  // true=显示公告, false=关闭公告
+            title: "📢 平台公告",
+            badge: "公告",
+            badgeClass: "badge-announce",
+            image: "",  // 可留空不显示图片
+            content: `
+                <p>欢迎来到 <strong style="color:#4cc9f0">异次元</strong>！</p>
+                <p>本站为异次元官方总站，除此之外其他网站勿信！</p>
+                <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0">
+                <p>📌 官方唯一店铺：<a href="https://skynet.j3.ink" target="_blank" style="color:#4cc9f0">skynet.j3.ink</a></p>
+                <p>📌 官方备用资源库：<a href="https://shoplnk.me/degenerator" target="_blank" style="color:#4cc9f0">https://shoplnk.me/degenerator</a></p>
+                <p>⚠️ 发现任何冒牌货，请与我们联系！</p>
+                <p>📧 官方邮箱:degenerator@foxmail.com</p>
+            `,
+            btnText: "我知道了"
+        },
+        // ---- 广告列表（可叠加多个） ----
+        ads: [
+            // 广告1 - 带链接的广告
+            {
+                enabled: true,  // true=显示此广告, false=关闭此广告
+                title: "🎯 广告位①",
+                badge: "推广",
+                badgeClass: "badge-ad",
+                image: "",  // 广告图片URL，留空不显示
+                content: `
+                    <p>欢迎体验我们的服务！</p>
+                    <p>如有合作需求，请联系官方邮箱：<strong style="color:#4cc9f0">degenerator@foxmail.com</strong></p>
+                `,
+                btnText: "立即前往",
+                btnLink: "https://"  // 按钮跳转链接
+            }
+            // 如需添加更多广告，在上一行后面加逗号，然后复制下面的模板（去掉//注释）
+            // ,
+            // {
+            //     enabled: true,
+            //     title: "🎯 广告位②",
+            //     badge: "推广",
+            //     badgeClass: "badge-ad",
+            //     image: "",
+            //     content: `<p>第二个广告内容</p>`,
+            //     btnText: "立即前往",
+            //     btnLink: "https://example2.com"
+            // }
+        ]
+    };
+
+    // ===== 弹窗逻辑 =====
+    (function() {
+        const container = document.getElementById('popupContainer');
+        if (!container) return;
+        
+        // 构建弹窗HTML
+        function buildPopupHTML(data, type) {
+            const isAnnounce = type === 'announcement';
+            const badgeText = isAnnounce ? (data.badge || '公告') : (data.badge || '广告');
+            const badgeClass = isAnnounce ? (data.badgeClass || 'badge-announce') : (data.badgeClass || 'badge-ad');
+            
+            let html = '<div class="popup-overlay" id="popupOverlay">';
+            html += '<div class="popup-box">';
+            html += '<button class="popup-close" onclick="closeCurrentPopup()"><i class="fas fa-times"></i></button>';
+            if (data.image) {
+                html += `<img class="popup-img" src="${data.image}" alt="" onerror="this.style.display='none'">`;
+            }
+            html += `<div class="popup-badge ${badgeClass}">${badgeText}</div>`;
+            html += `<div class="popup-title">${data.title || ''}</div>`;
+            html += `<div class="popup-desc">${data.content || ''}</div>`;
+            
+            // 按钮区域
+            html += '<div class="popup-buttons">';
+            
+            if (isAnnounce) {
+                // 公告：只有"我知道了"按钮（关闭弹窗）
+                html += `<button class="popup-btn" onclick="closeCurrentPopup()"><i class="fas fa-check"></i> ${data.btnText || '我知道了'}</button>`;
+            } else {
+                // 广告：显示"立即前往"（带链接）+ "关闭"按钮
+                if (data.btnText && data.btnLink) {
+                    html += `<a href="${data.btnLink}" target="_blank" class="popup-btn popup-btn-link" onclick="closeCurrentPopupDelayed()"><i class="fas fa-external-link-alt"></i> ${data.btnText}</a>`;
+                }
+                html += `<button class="popup-btn-secondary" onclick="closeCurrentPopup()"><i class="fas fa-times"></i> 关闭</button>`;
+            }
+            
+            html += '</div></div></div>';
+            return html;
+        }
+        
+        // 弹窗队列
+        let popupQueue = [];
+        let isPopupShowing = false;
+        
+        // 关闭当前弹窗，显示下一个
+        window.closeCurrentPopup = function() {
+            const overlay = document.getElementById('popupOverlay');
+            if (overlay) {
+                overlay.style.animation = 'popupFadeIn .2s reverse';
+                setTimeout(() => {
+                    overlay.remove();
+                    isPopupShowing = false;
+                    showNextPopup();
+                }, 200);
+            } else {
+                isPopupShowing = false;
+                showNextPopup();
+            }
+        };
+        
+        // 点击"立即前往"后延迟关闭（让链接先跳转）
+        window.closeCurrentPopupDelayed = function() {
+            setTimeout(function() {
+                const overlay = document.getElementById('popupOverlay');
+                if (overlay) {
+                    overlay.remove();
+                    isPopupShowing = false;
+                    showNextPopup();
+                }
+            }, 500);
+        };
+        
+        // 显示下一个弹窗
+        function showNextPopup() {
+            if (popupQueue.length === 0) {
+                isPopupShowing = false;
+                return;
+            }
+            if (isPopupShowing) return;
+            
+            isPopupShowing = true;
+            const nextData = popupQueue.shift();
+            container.innerHTML = buildPopupHTML(nextData.html, nextData.type);
+        }
+        
+        // 初始化弹窗队列
+        function initPopups() {
+            popupQueue = [];
+            
+            // 1. 添加公告
+            if (POPUP_CONFIG.announcement.enabled) {
+                popupQueue.push({
+                    type: 'announcement',
+                    html: POPUP_CONFIG.announcement
+                });
+            }
+            
+            // 2. 添加广告（按顺序）
+            if (POPUP_CONFIG.ads && POPUP_CONFIG.ads.length > 0) {
+                POPUP_CONFIG.ads.forEach(ad => {
+                    if (ad.enabled) {
+                        popupQueue.push({
+                            type: 'ad',
+                            html: ad
+                        });
+                    }
+                });
+            }
+            
+            // 开始显示
+            if (popupQueue.length > 0) {
+                showNextPopup();
+            }
+        }
+        
+        // 页面加载完成后执行
+        if (document.readyState === 'complete') {
+            setTimeout(initPopups, 300);
+        } else {
+            window.addEventListener('load', function() {
+                setTimeout(initPopups, 300);
+            });
+        }
+    })();
 });
 window.addEventListener('hashchange', function() {
     const hash = location.hash.replace('#', '') || 'home';
